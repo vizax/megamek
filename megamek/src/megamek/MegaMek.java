@@ -136,25 +136,25 @@ public class MegaMek {
         DigestInputStream in = null;
 
         // Assume UNIX/Linux, which has the jar in the root folder
-        String filename = "MegaMek.jar";
+        String filename = "MegaMek.jar"; //$NON-NLS-1$
         // If it isn't UNIX/Linux, maybe it's Windows where we've stashed it in the lib folder
-        if (new File("lib/"+filename).exists()) {
-            filename = "lib/"+filename;
+        if (new File("lib/"+filename).exists()) { //$NON-NLS-1$
+            filename = "lib/"+filename; //$NON-NLS-1$
         // And if it isn't either UNIX/Linux or Windows it's got to be Mac, where it's buried inside the app
-        } else if (new File("MegaMek.app/Contents/Resources/Java/"+filename).exists()) {
-            filename = "MegaMek.app/Contents/Resources/Java/"+filename;
+        } else if (new File("MegaMek.app/Contents/Resources/Java/"+filename).exists()) { //$NON-NLS-1$
+            filename = "MegaMek.app/Contents/Resources/Java/"+filename; //$NON-NLS-1$
         }
 
         // Calculate the digest for the given file.
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance("SHA-256"); //$NON-NLS-1$
             in = new DigestInputStream(new FileInputStream(filename), md);
             while (0 < in.read(buffer)) {}
             // gets digest
             byte[] digest = md.digest();
             // convert the byte to hex format
             for (byte d : digest) {
-                sb.append(String.format("%02x", d));
+                sb.append(String.format("%02x", d)); //$NON-NLS-1$
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -568,7 +568,7 @@ public class MegaMek {
                 nextToken();
                 Configuration.setDataDir(new File(dataDirName));
             } else {
-                error("directory name expected"); // $NON-NLS-1$
+                error(Messages.getString("MegaMek.DirectoryNameExpected")); // $NON-NLS-1$ //$NON-NLS-1$
             }
         }
         
@@ -673,24 +673,24 @@ public class MegaMek {
                 filename = getTokenValue();
                 nextToken();
 
-                if (!new File("./docs").exists()) {
-                    new File("./docs").mkdir();
+                if (!new File("./docs").exists()) { //$NON-NLS-1$
+                    new File("./docs").mkdir(); //$NON-NLS-1$
                 }
 
                 try {
-                    File file = new File("./docs/" + filename);
+                    File file = new File("./docs/" + filename); //$NON-NLS-1$
                     BufferedWriter w = new BufferedWriter(new FileWriter(file));
-                    w.write("Megamek Unit BattleForce Converter");
+                    w.write(Messages.getString("MegaMek.MegamekUnitBattleforceConverter")); //$NON-NLS-1$
                     w.newLine();
-                    w.write("This file can be regenerated with java -jar MegaMek.jar -bfc filename");
+                    w.write(Messages.getString("MegaMek.RegenerateBattleforceConverterFile")); //$NON-NLS-1$
                     w.newLine();
-                    w.write("Element\tSize\tMP\tArmor\tStructure\tS\tM\tL\tOV\tPoint Cost\tAbilites");
+                    w.write(Messages.getString("MegaMek.BattleforceConverterBreakdown")); //$NON-NLS-1$
                     w.newLine();
 
                     MechSummary[] units = MechSummaryCache.getInstance()
                             .getAllMechs();
                     for (MechSummary unit : units) {
-                        if (!unit.getUnitType().equalsIgnoreCase("mek")) {
+                        if (!unit.getUnitType().equalsIgnoreCase("mek")) { //$NON-NLS-1$
                             continue;
                         }
                         Entity entity = new MechFileParser(
@@ -698,34 +698,34 @@ public class MegaMek {
                                 .getEntity();
 
                         w.write(unit.getName());
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity.getBattleForceSize()));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(entity.getBattleForceMovement());
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity
                                 .getBattleForceArmorPoints()));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity
                                 .getBattleForceStructurePoints()));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         // Most Aero units and some ground units have multiple
                         // facings.
                         // Also, each facing potentially has Capital, Capital
                         // Missile, and Sub Capital brackets as well.
                         w.write(Integer.toString(entity
                                 .getBattleForceStandardWeaponsDamage(Entity.BATTLEFORCESHORTRANGE)));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity
                                 .getBattleForceStandardWeaponsDamage(Entity.BATTLEFORCEMEDIUMRANGE)));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity
                                 .getBattleForceStandardWeaponsDamage(Entity.BATTLEFORCELONGRANGE)));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(entity.getBattleForceOverHeatValue());
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(Integer.toString(entity.getBattleForcePoints()));
-                        w.write("\t");
+                        w.write("\t"); //$NON-NLS-1$
                         w.write(entity.getBattleForceSpecialAbilites());
                         w.newLine();
                     }
@@ -755,26 +755,26 @@ public class MegaMek {
                 }
                 nextToken();
 
-                if (!new File("./docs").exists()) {
-                    new File("./docs").mkdir();
+                if (!new File("./docs").exists()) { //$NON-NLS-1$
+                    new File("./docs").mkdir(); //$NON-NLS-1$
                 }
 
                 try {
-                    File file = new File("./docs/" + filename);
+                    File file = new File("./docs/" + filename); //$NON-NLS-1$
                     BufferedWriter w = new BufferedWriter(new FileWriter(file));
                     if (officialUnitList) {
-                        w.write("Megamek Official Unit List");
+                        w.write(Messages.getString("MegaMek.MegamekOfficialUnitList")); //$NON-NLS-1$
                         w.newLine();
-                        w.write("This file can be regenerated with java -jar MegaMek.jar -oul");
+                        w.write(Messages.getString("MegaMek.RegenerateOfficialUnitList")); //$NON-NLS-1$
                         w.newLine();
-                        w.write("Format is: Chassis Model|");
+                        w.write(Messages.getString("MegaMek.OfficialUnitListBreakdown")); //$NON-NLS-1$
                         w.newLine();
                     } else {
-                        w.write("Megamek Unit Database");
+                        w.write(Messages.getString("MegaMek.MegamekUnitDatabase")); //$NON-NLS-1$
                         w.newLine();
-                        w.write("This file can be regenerated with java -jar MegaMek.jar -export filename");
+                        w.write(Messages.getString("MegaMek.RegenerateUnitDatabase")); //$NON-NLS-1$
                         w.newLine();
-                        w.write("Type,SubType,Name,Model,BV,Cost (Loaded), Cost (Unloaded),Year,Techlevel,Tonnage,Tech,Canon,Walk,Run,Jump");
+                        w.write(Messages.getString("MegaMek.UnitDatabaseBreakdown")); //$NON-NLS-1$
                         w.newLine();
                     }
 
@@ -782,51 +782,51 @@ public class MegaMek {
                             officialUnitList).getAllMechs();
                     for (MechSummary unit : units) {
                         String unitType = unit.getUnitType();
-                        if (unitType.equalsIgnoreCase("mek")) {
-                            unitType = "'Mech";
+                        if (unitType.equalsIgnoreCase("mek")) { //$NON-NLS-1$
+                            unitType = "'Mech"; //$NON-NLS-1$
                         }
 
                         if (!officialUnitList) {
                             w.write(unitType);
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(unit.getUnitSubType());
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(unit.getChassis());
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(unit.getModel());
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Integer.toString(unit.getBV()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Long.toString(unit.getCost()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Long.toString(unit.getUnloadedCost()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Integer.toString(unit.getYear()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(TechConstants.getLevelDisplayableName(unit
                                     .getType()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Float.toString(unit.getTons()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             if (unit.isClan()) {
-                                w.write("Clan,");
+                                w.write(Messages.getString("MegaMek.UnitListClanLabel")); //$NON-NLS-1$
                             } else {
-                                w.write("IS,");
+                                w.write(Messages.getString("MegaMek.UnitListInnerSphereLabel")); //$NON-NLS-1$
                             }
                             if (unit.isCanon()) {
-                                w.write("Canon,");
+                                w.write(Messages.getString("MegaMek.UnitListCannonLabel")); //$NON-NLS-1$
                             } else {
-                                w.write("Non-Canon,");
+                                w.write(Messages.getString("MegaMek.UnitListNonCannonLabel")); //$NON-NLS-1$
                             }
                             w.write(Integer.toString(unit.getWalkMp()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Integer.toString(unit.getRunMp()));
-                            w.write(",");
+                            w.write(","); //$NON-NLS-1$
                             w.write(Integer.toString(unit.getJumpMp()));
                         } else {
                             w.write(unit.getChassis()
-                                    + (unit.getModel().equals("") ? "|" : " "
-                                            + unit.getModel() + "|"));
+                                    + (unit.getModel().equals("") ? "|" : " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                            + unit.getModel() + "|")); //$NON-NLS-1$
                         }
                         w.newLine();
                     }
