@@ -122,7 +122,7 @@ public class WeaponFireInfo {
                    EntityState targetState, Mounted weapon, IGame game, boolean assumeUnderFlightPath,
                    boolean guess, Princess owner) {
         final String METHOD_NAME =
-                "WeaponFireInfo(Entity, EntityState, MovePath, Targetable, EntityState, Mounted, IGame, boolean)";
+                "WeaponFireInfo(Entity, EntityState, MovePath, Targetable, EntityState, Mounted, IGame, boolean)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
         this.owner = owner;
 
@@ -346,13 +346,13 @@ public class WeaponFireInfo {
      * @param guess Set TRUE to esitmate the chance to hit rather than doing the full calculation.
      */
     protected void initDamage(@Nullable MovePath shooterPath, boolean assumeUnderFlightPath, boolean guess) {
-        final String METHOD_NAME = "initDamage(MovePath, boolean)";
+        final String METHOD_NAME = "initDamage(MovePath, boolean)"; //$NON-NLS-1$
 
         StringBuilder msg =
-                new StringBuilder("Initializing Damage for ").append(getShooter().getDisplayName())
-                                                             .append(" firing ").append(getWeapon().getDesc())
-                                                             .append(" at ").append(getTarget().getDisplayName())
-                                                             .append(":");
+                new StringBuilder(Messages.getString("WeaponFireInfo.InitializeDamageFor")).append(getShooter().getDisplayName()) //$NON-NLS-1$
+                                                             .append(Messages.getString("WeaponFireInfo.Firing")).append(getWeapon().getDesc()) //$NON-NLS-1$
+                                                             .append(Messages.getString("WeaponFireInfo.At")).append(getTarget().getDisplayName()) //$NON-NLS-1$
+                                                             .append(Messages.getString("WeaponFireInfo.Colon")); //$NON-NLS-1$
 
         try {
             // Set up the attack action and calculate the chance to hit.
@@ -367,7 +367,7 @@ public class WeaponFireInfo {
 
             // If we can't hit, set everything zero and return..
             if (getToHit().getValue() > 12) {
-                owner.log(getClass(), METHOD_NAME, LogLevel.DEBUG, msg.append("\n\tImpossible toHit: ")
+                owner.log(getClass(), METHOD_NAME, LogLevel.DEBUG, msg.append(Messages.getString("WeaponFireInfo.ImpossibleToHit")) //$NON-NLS-1$
                                                                       .append(getToHit().getValue()).toString());
                 setProbabilityToHit(0);
                 setMaxDamage(0);
@@ -379,17 +379,17 @@ public class WeaponFireInfo {
             }
 
             if (getShooterState().hasNaturalAptGun()) {
-                msg.append("\n\tAttacker has Natural Aptitude Gunnery");
+                msg.append(Messages.getString("WeaponFireInfo.AttackerNaturalAptitude")); //$NON-NLS-1$
             }
             setProbabilityToHit(Compute.oddsAbove(getToHit().getValue(), getShooterState().hasNaturalAptGun()) / 100);
-            msg.append("\n\tHit Chance: ").append(LOG_PER.format(getProbabilityToHit()));
+            msg.append(Messages.getString("WeaponFireInfo.HitChance")).append(LOG_PER.format(getProbabilityToHit())); //$NON-NLS-1$
 
             setHeat(((WeaponType) getWeapon().getType()).getHeat());
-            msg.append("\n\tHeat: ").append(getHeat());
+            msg.append(Messages.getString("WeaponFireInfo.Heat")).append(getHeat()); //$NON-NLS-1$
 
             setExpectedDamageOnHit(computeExpectedDamage());
             setMaxDamage(getExpectedDamageOnHit());
-            msg.append("\n\tMax Damage: ").append(LOG_DEC.format(maxDamage));
+            msg.append(Messages.getString("WeaponFireInfo.MaxDamage")).append(LOG_DEC.format(maxDamage)); //$NON-NLS-1$
 
             double expectedCriticalHitCount = ProbabilityCalculator.getExpectedCriticalHitCount();
 
@@ -458,7 +458,7 @@ public class WeaponFireInfo {
     }
 
     public WeaponAttackAction getWeaponAttackAction() {
-        final String METHOD_NAME = "getWeaponAttackAction(IGame)";
+        final String METHOD_NAME = "getWeaponAttackAction(IGame)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -480,11 +480,11 @@ public class WeaponFireInfo {
     }
 
     String getDebugDescription() {
-        return getWeapon().getName() + " P. Hit: " + LOG_PER.format(getProbabilityToHit())
-                + ", Max Dam: " + LOG_DEC.format(getMaxDamage())
-                + ", Exp. Dam: " + LOG_DEC.format(getExpectedDamageOnHit())
-                + ", Num Crits: " + LOG_DEC.format(getExpectedCriticals())
-                + ", Kill Prob: " + LOG_PER.format(getKillProbability());
+        return getWeapon().getName() + " P. Hit: " + LOG_PER.format(getProbabilityToHit()) //$NON-NLS-1$
+                + ", Max Dam: " + LOG_DEC.format(getMaxDamage()) //$NON-NLS-1$
+                + ", Exp. Dam: " + LOG_DEC.format(getExpectedDamageOnHit()) //$NON-NLS-1$
+                + ", Num Crits: " + LOG_DEC.format(getExpectedCriticals()) //$NON-NLS-1$
+                + ", Kill Prob: " + LOG_PER.format(getKillProbability()); //$NON-NLS-1$
 
     }
 }

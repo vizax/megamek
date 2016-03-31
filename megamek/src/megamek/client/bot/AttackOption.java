@@ -74,7 +74,7 @@ public class AttackOption extends ToHitData {
     public double expected; // damage adjusted by secondary to-hit odds
     public double primary_expected; // damage adjusted by primary to-hit odds
     public int ammoLeft = -1; // -1 doesn't use ammo
-    public String use_mode = "None"; // The mode the weapon is set to for
+    public String use_mode = "None"; // The mode the weapon is set to for //$NON-NLS-1$
 
     // this option
 

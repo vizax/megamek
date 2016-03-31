@@ -89,7 +89,7 @@ class RankedPath implements Comparable<RankedPath> {
 
     @Override
     public String toString() {
-        DecimalFormat format = new DecimalFormat("0.00");
-        return "Rank (" + format.format(rank) + ")\tReason (" + reason + ")\nPath: " + path.toString();
+        DecimalFormat format = new DecimalFormat("0.00"); //$NON-NLS-1$
+        return "Rank (" + format.format(rank) + ")\tReason (" + reason + ")\nPath: " + path.toString(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 }

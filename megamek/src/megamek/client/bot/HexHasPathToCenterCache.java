@@ -116,10 +116,10 @@ public final class HexHasPathToCenterCache {
          */
         Key(String hexCoords, EntityMovementMode movementMode) {
             if (StringUtil.isNullOrEmpty(hexCoords)) {
-                throw new IllegalArgumentException("Starting Coords is NULL or Empty.");
+                throw new IllegalArgumentException(Messages.getString("HexHasPathToCenterCache.StartingCoordsNull")); //$NON-NLS-1$
             }
             if (movementMode == null) {
-                throw new IllegalArgumentException("Movement Type is NULL.");
+                throw new IllegalArgumentException(Messages.getString("HexHasPathToCenterCache.MovementTypeNull")); //$NON-NLS-1$
             }
             this.hexCoords = hexCoords;
             this.movementMode = movementMode;
@@ -183,7 +183,7 @@ public final class HexHasPathToCenterCache {
 
         @Override
         public String toString() {
-            return getHexCoords() + "_" + getMovementMode().toString();
+            return getHexCoords() + "_" + getMovementMode().toString(); //$NON-NLS-1$
         }
     }
 }

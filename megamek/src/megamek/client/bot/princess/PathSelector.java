@@ -36,7 +36,7 @@ public class PathSelector {
     }
 
     public MovePath selectPath(IGame game, ArrayList<MovePath> paths) {
-        final String METHOD_NAME = "selectPath(IGame, ArrayList<MovePath>)";
+        final String METHOD_NAME = "selectPath(IGame, ArrayList<MovePath>)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
 
         try {

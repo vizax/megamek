@@ -102,9 +102,9 @@ public class EntityEvaluationResponse {
 
     @Override
     public String toString() {
-        DecimalFormat format = new DecimalFormat("0.000");
-        return "Enemy: " + format.format(estimatedEnemyDamage)
-               + "\tMe: " + format.format(myEstimatedDamage)
-               + "\tPhysical: " + format.format(myEstimatedPhysicalDamage);
+        DecimalFormat format = new DecimalFormat("0.000"); //$NON-NLS-1$
+        return "Enemy: " + format.format(estimatedEnemyDamage) //$NON-NLS-1$
+               + "\tMe: " + format.format(myEstimatedDamage) //$NON-NLS-1$
+               + "\tPhysical: " + format.format(myEstimatedPhysicalDamage); //$NON-NLS-1$
     }
 }

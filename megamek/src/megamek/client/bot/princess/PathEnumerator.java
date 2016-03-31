@@ -85,7 +85,7 @@ public class PathEnumerator {
      */
 
     void clear() {
-        final String METHOD_NAME = "clear()";
+        final String METHOD_NAME = "clear()"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
             getUnitPaths().clear();
@@ -97,7 +97,7 @@ public class PathEnumerator {
     }
 
     Coords getLastKnownCoords(Integer entityId) {
-        final String METHOD_NAME = "getLastKnownCoords(Integer)";
+        final String METHOD_NAME = "getLastKnownCoords(Integer)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
             CoordFacingCombo ccr = getLastKnownLocations().get(entityId);
@@ -118,7 +118,7 @@ public class PathEnumerator {
      * @return A {@link Set} of {@link Entity} objects at the given {@link Coords}.
      */
     public Set<Integer> getEntitiesWithLocation(Coords location, boolean groundOnly) {
-        final String METHOD_NAME = "getEntitiesWithLocation(Coords, boolean)";
+        final String METHOD_NAME = "getEntitiesWithLocation(Coords, boolean)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
             Set<Integer> returnSet = new TreeSet<>();
@@ -148,7 +148,7 @@ public class PathEnumerator {
      * From a list of potential moves, make a potential ending location chart
      */
     void updateUnitLocations(Entity entity, List<MovePath> paths) {
-        final String METHOD_NAME = "updateUnitLocations(Entity, ArrayList<MovePath>)";
+        final String METHOD_NAME = "updateUnitLocations(Entity, ArrayList<MovePath>)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
             // clear previous locations for this entity
@@ -168,7 +168,7 @@ public class PathEnumerator {
      * calculates all moves for a given unit, keeping the shortest path to each hex/facing pair
      */
     public void recalculateMovesFor(final Entity mover) {
-        final String METHOD_NAME = "recalculateMovesFor(IGame, Entity)";
+        final String METHOD_NAME = "recalculateMovesFor(IGame, Entity)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
 
@@ -353,7 +353,7 @@ public class PathEnumerator {
      * @return TRUE if the path is legal.
      */
     public boolean isLegalAeroMove(MovePath path) {
-        final String METHOD_NAME = "isLegalAeroMove(MovePath)";
+        final String METHOD_NAME = "isLegalAeroMove(MovePath)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
         try {
             // no non-aeros allowed

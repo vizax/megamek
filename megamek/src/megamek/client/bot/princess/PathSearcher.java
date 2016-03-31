@@ -66,7 +66,7 @@ public class PathSearcher {
         }
 
         public int compareTo(PathState po) {
-            final String METHOD_NAME = "compareTo(PathState)";
+            final String METHOD_NAME = "compareTo(PathState)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
             try {
                 if (facing < po.facing) {
@@ -120,7 +120,7 @@ public class PathSearcher {
     ArrayList<WeightedPath> seeAllPaths(ArrayList<WeightedPath> start_paths,
                                         boolean forward, boolean backward, IGame game,
                                         TreeMap<PathState, WeightedPath> pathmap) {
-        final String METHOD_NAME = "seeAllPaths(ArrayList<WeightedPath>, boolean, boolean, IGame, TreeMap<PathState, WeightedPath>)";
+        final String METHOD_NAME = "seeAllPaths(ArrayList<WeightedPath>, boolean, boolean, IGame, TreeMap<PathState, WeightedPath>)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
         try {
             ArrayList<WeightedPath> next_steps = new ArrayList<WeightedPath>();
@@ -167,7 +167,7 @@ public class PathSearcher {
     }
 
     ArrayList<WeightedPath> getAllWeightedPaths(Entity entity, IGame game) {
-        final String METHOD_NAME = "getAllWeightedPaths(Entity, IGame)";
+        final String METHOD_NAME = "getAllWeightedPaths(Entity, IGame)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
         try {
             ranker.initUnitTurn(entity, game);
@@ -195,7 +195,7 @@ public class PathSearcher {
     }
 
     ArrayList<WeightedPath> getTopPaths(Entity entity, IGame game, int npaths) {
-        final String METHOD_NAME = "getTopPaths(Entity, IGame, int)";
+        final String METHOD_NAME = "getTopPaths(Entity, IGame, int)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
         try {
             ArrayList<WeightedPath> allpaths = getAllWeightedPaths(entity, game);
@@ -207,7 +207,7 @@ public class PathSearcher {
     }
 
     MovePath getBestPath(Entity entity, IGame game) {
-        final String METHOD_NAME = "getBestPath(Entity, IGame)";
+        final String METHOD_NAME = "getBestPath(Entity, IGame)"; //$NON-NLS-1$
         owner.methodBegin(getClass(), METHOD_NAME);
         try {
             //System.err.println("Unit: " + entity.getDisplayName() + " is pathing.");

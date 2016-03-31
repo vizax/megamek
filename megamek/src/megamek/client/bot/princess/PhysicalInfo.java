@@ -131,17 +131,17 @@ public class PhysicalInfo {
      */
     protected void initDamage(PhysicalAttackType physicalAttackType, EntityState shooterState, EntityState targetState,
                               boolean guess, IGame game) {
-        final String METHOD_NAME = "initDamage(PhysicalAttackType, EntityState, EntityState, boolean, IGame)";
+        final String METHOD_NAME = "initDamage(PhysicalAttackType, EntityState, EntityState, boolean, IGame)"; //$NON-NLS-1$
 
         StringBuilder msg =
-                new StringBuilder("Initializing Damage for ").append(getShooter().getDisplayName())
-                                                             .append(" ").append(physicalAttackType.toString())
-                                                             .append(" at ").append(getTarget().getDisplayName())
-                                                             .append(":");
+                new StringBuilder(Messages.getString("PhysicalInfo.InitializingDamageFor")).append(getShooter().getDisplayName()) //$NON-NLS-1$
+                                                             .append(" ").append(physicalAttackType.toString()) //$NON-NLS-1$
+                                                             .append(Messages.getString("PhysicalInfo.At")).append(getTarget().getDisplayName()) //$NON-NLS-1$
+                                                             .append(Messages.getString("PhysicalInfo.Colon")); //$NON-NLS-1$
 
         // Only mechs do physical attacks.
         if (!(getShooter() instanceof Mech)) {
-            owner.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg.append("\n\tNot a mech!").toString());
+            owner.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg.append(Messages.getString("PhysicalInfo.NotMech")).toString()); //$NON-NLS-1$
             setProbabilityToHit(0);
             setMaxDamage(0);
             setExpectedCriticals(0);
@@ -174,7 +174,7 @@ public class PhysicalInfo {
 
         // If we can't hit, set all values to 0 and return.
         if (getHitData().getValue() > 12) {
-            owner.log(getClass(), METHOD_NAME, LogLevel.INFO, msg.append("\n\tImpossible toHit: ")
+            owner.log(getClass(), METHOD_NAME, LogLevel.INFO, msg.append(Messages.getString("PhysicalInfo.ImpossibleToHit")) //$NON-NLS-1$
                                                                  .append(getHitData().getValue()).toString());
             setProbabilityToHit(0);
             setMaxDamage(0);
@@ -191,7 +191,7 @@ public class PhysicalInfo {
             } else {
                 // Only bipeds & tripods can punch.
                 owner.log(getClass(), METHOD_NAME, LogLevel.WARNING,
-                          msg.append("\n\tnon-biped/tripod trying to punch!").toString());
+                          msg.append(Messages.getString("PhysicalInfo.TryingToPunch")).toString()); //$NON-NLS-1$
                 setProbabilityToHit(0);
                 setMaxDamage(0);
                 setExpectedCriticals(0);
@@ -204,7 +204,7 @@ public class PhysicalInfo {
         }
 
         if (shooterState.hasNaturalAptPiloting()) {
-            msg.append("\n\tAttacker has Natural Aptitude Piloting");
+            msg.append(Messages.getString("PhysicalInfo.AttackerNaturalAptitude")); //$NON-NLS-1$
         }
         setProbabilityToHit(Compute.oddsAbove(getHitData().getValue(), shooterState.hasNaturalAptPiloting()) / 100.0);
 
@@ -388,11 +388,11 @@ public class PhysicalInfo {
     }
 
     String getDebugDescription() {
-        return getAttackType().toString() + " P. Hit: " + LOG_PER.format(getProbabilityToHit())
-               + ", Max Dam: " + LOG_DEC.format(getMaxDamage())
-               + ", Exp. Dam: " + LOG_DEC.format(getExpectedDamageOnHit())
-               + ", Num Crits: " + LOG_DEC.format(getExpectedCriticals())
-               + ", Kill Prob: " + LOG_PER.format(getKillProbability());
+        return getAttackType().toString() + " P. Hit: " + LOG_PER.format(getProbabilityToHit()) //$NON-NLS-1$
+               + ", Max Dam: " + LOG_DEC.format(getMaxDamage()) //$NON-NLS-1$
+               + ", Exp. Dam: " + LOG_DEC.format(getExpectedDamageOnHit()) //$NON-NLS-1$
+               + ", Num Crits: " + LOG_DEC.format(getExpectedCriticals()) //$NON-NLS-1$
+               + ", Kill Prob: " + LOG_PER.format(getKillProbability()); //$NON-NLS-1$
 
     }
 }

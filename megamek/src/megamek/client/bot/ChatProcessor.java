@@ -37,19 +37,19 @@ public class ChatProcessor {
     protected boolean shouldBotAcknowledgeDefeat(String message, BotClient bot) {
         boolean result = false;
         if (!StringUtil.isNullOrEmpty(message) &&
-            (message.contains("declares individual victory at the end of the turn.")
-             || message.contains("declares team victory at the end of the turn."))) {
-            String[] splitMessage = message.split(" ");
+            (message.contains("declares individual victory at the end of the turn.") //$NON-NLS-1$
+             || message.contains("declares team victory at the end of the turn."))) { //$NON-NLS-1$
+            String[] splitMessage = message.split(" "); //$NON-NLS-1$
             int i = 1;
             String name = splitMessage[i];
-            while (!splitMessage[i + 1].equals("declares")) {
-                name += " " + splitMessage[i + 1];
+            while (!splitMessage[i + 1].equals("declares")) { //$NON-NLS-1$
+                name += " " + splitMessage[i + 1]; //$NON-NLS-1$
                 i++;
             }
             for (IPlayer p : bot.getGame().getPlayersVector()) {
                 if (p.getName().equals(name)) {
                     if (p.isEnemyOf(bot.getLocalPlayer())) {
-                        bot.sendChat("/defeat");
+                        bot.sendChat("/defeat"); //$NON-NLS-1$
                         result = true;
                     }
                     break;
@@ -64,18 +64,18 @@ public class ChatProcessor {
 
         if (!StringUtil.isNullOrEmpty(message) &&
             (message.contains(DefeatCommand.wantsDefeat))) {
-            String[] splitMessage = message.split(" ");
+            String[] splitMessage = message.split(" "); //$NON-NLS-1$
             int i = 1;
             String name = splitMessage[i];
-            while (!splitMessage[i + 1].equals("wants")
-                   && !splitMessage[i + 1].equals("admits")) {
-                name += " " + splitMessage[i + 1];
+            while (!splitMessage[i + 1].equals("wants") //$NON-NLS-1$
+                   && !splitMessage[i + 1].equals("admits")) { //$NON-NLS-1$
+                name += " " + splitMessage[i + 1]; //$NON-NLS-1$
                 i++;
             }
             for (IPlayer p : bot.getGame().getPlayersVector()) {
                 if (p.getName().equals(name)) {
                     if (p.isEnemyOf(bot.getLocalPlayer())) {
-                        bot.sendChat("/victory");
+                        bot.sendChat("/victory"); //$NON-NLS-1$
                         result = true;
                     }
                     break;
@@ -117,7 +117,7 @@ public class ChatProcessor {
         if (name.equals(Server.ORIGIN)) {
             String msg = st.nextToken();
             if (msg.contains(JoinTeamCommand.SERVER_VOTE_PROMPT_MSG)) {
-                bot.sendChat("/allowTeamChange");
+                bot.sendChat("/allowTeamChange"); //$NON-NLS-1$
             }
             return;
         } else if (p == null) {
@@ -177,11 +177,11 @@ public class ChatProcessor {
                             }
                         }
                         if (understood) {
-                            tb.sendChat("Understood " + p.getName());
+                            tb.sendChat(Messages.getString("ChatProcessor.BotUnderstood") + p.getName()); //$NON-NLS-1$
                         }
                     }
                 } else {
-                    tb.sendChat("I can't do that, " + p.getName());
+                    tb.sendChat(Messages.getString("ChatProcessor.BotCanNotDo") + p.getName()); //$NON-NLS-1$
                 }
             }
         } catch (Exception ex) {
@@ -201,17 +201,17 @@ public class ChatProcessor {
     }
 
     protected void additionalPrincessCommands(GamePlayerChatEvent chatEvent, Princess princess) {
-        final String METHOD_NAME = "additionalPrincessCommands(GamePlayerChatEvent, Princess, IPlayer)";
+        final String METHOD_NAME = "additionalPrincessCommands(GamePlayerChatEvent, Princess, IPlayer)"; //$NON-NLS-1$
 
         // Commands should be sent in this format:
         //   <botName>: <command> : <arguments>
 
-        StringTokenizer tokenizer = new StringTokenizer(chatEvent.getMessage(), ":");
+        StringTokenizer tokenizer = new StringTokenizer(chatEvent.getMessage(), ":"); //$NON-NLS-1$
         if (tokenizer.countTokens() < 3) {
             return;
         }
 
-        String msg = "Received message: \"" + chatEvent.getMessage() + "\".\tMessage Type: " + chatEvent.getEventName();
+        String msg = "Received message: \"" + chatEvent.getMessage() + "\".\tMessage Type: " + chatEvent.getEventName(); //$NON-NLS-1$ //$NON-NLS-2$
         princess.log(getClass(), METHOD_NAME, LogLevel.INFO, msg);
 
         // First token should be who sent the message.
@@ -221,7 +221,7 @@ public class ChatProcessor {
         String sentTo = tokenizer.nextToken().trim();
         IPlayer princessPlayer = princess.getLocalPlayer();
         if (princessPlayer == null) {
-            princess.log(getClass(), METHOD_NAME, LogLevel.ERROR, "Princess Player is NULL.");
+            princess.log(getClass(), METHOD_NAME, LogLevel.ERROR, "Princess Player is NULL."); //$NON-NLS-1$
             return;
         }
         String princessName = princessPlayer.getName(); // Make sure the command is directed at the Princess player.
@@ -232,13 +232,13 @@ public class ChatProcessor {
         // The third token should be the actual command.
         String command = tokenizer.nextToken().trim();
         if (command.length() < 2) {
-            princess.sendChat("I do not recognize that command.");
+            princess.sendChat(Messages.getString("ChatProcessor.BotDoNotRecognizeCommand")); //$NON-NLS-1$
         }
 
         // Any remaining tokens should be the command arguments.
         String[] arguments = null;
         if (tokenizer.hasMoreElements()) {
-            arguments = tokenizer.nextToken().trim().split(" ");
+            arguments = tokenizer.nextToken().trim().split(" "); //$NON-NLS-1$
         }
 
         // Make sure the speaker is a real player.
@@ -246,7 +246,7 @@ public class ChatProcessor {
         if (speakerPlayer == null) {
             speakerPlayer = getPlayer(princess.getGame(), from);
             if (speakerPlayer == null) {
-                princess.log(getClass(), METHOD_NAME, LogLevel.ERROR, "speakerPlayer is NULL.");
+                princess.log(getClass(), METHOD_NAME, LogLevel.ERROR, "speakerPlayer is NULL."); //$NON-NLS-1$
                 return;
             }
         }
@@ -254,20 +254,20 @@ public class ChatProcessor {
         // Change verbosity level.
         if (command.toLowerCase().startsWith(ChatCommands.VERBOSE.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "No log level specified.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotNoLogSpecified"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
             LogLevel newLevel = LogLevel.getLogLevel(arguments[0].trim());
             if (newLevel == null) {
-                msg = "Invalid verbosity specified: " + arguments[0];
+                msg = Messages.getString("ChatProcessor.BotInvalidVerbosity") + arguments[0]; //$NON-NLS-1$
                 princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg);
                 princess.sendChat(msg);
                 return;
             }
             princess.setVerbosity(newLevel);
-            msg = "Verbosity set to " + princess.getVerbosity().toString();
+            msg = Messages.getString("ChatProcessor.BotVerbositySetTo") + princess.getVerbosity().toString(); //$NON-NLS-1$
             princess.log(getClass(), METHOD_NAME, LogLevel.DEBUG, msg);
             princess.sendChat(msg);
             return;
@@ -275,16 +275,16 @@ public class ChatProcessor {
 
         // Tell me what behavior you are using.
         if (command.toLowerCase().startsWith(ChatCommands.SHOW_BEHAVIOR.getAbbreviation())) {
-            msg = "Current Behavior: " + princess.getBehaviorSettings().getDescription();
+            msg = Messages.getString("ChatProcessor.BotCurrentBehavior") + princess.getBehaviorSettings().getDescription(); //$NON-NLS-1$
             princess.sendChat(msg);
             princess.log(getClass(), METHOD_NAME, LogLevel.INFO, msg);
         }
 
         // List the available commands.
         if (command.toLowerCase().startsWith(ChatCommands.LIST__COMMANDS.getAbbreviation())) {
-            StringBuilder out = new StringBuilder("Princess Chat Commands");
+            StringBuilder out = new StringBuilder("Princess Chat Commands"); //$NON-NLS-1$
             for (ChatCommands cmd : ChatCommands.values()) {
-                out.append("\n").append(cmd.getSyntax()).append(" :: ").append(cmd.getDescription());
+                out.append("\n").append(cmd.getSyntax()).append(" :: ").append(cmd.getDescription()); //$NON-NLS-1$ //$NON-NLS-2$
             }
             princess.sendChat(out.toString());
         }
@@ -298,9 +298,9 @@ public class ChatProcessor {
 
         // If instructed to, flee.
         if (command.toLowerCase().startsWith(ChatCommands.FLEE.getAbbreviation())) {
-            msg = "Received flee order!";
+            msg = Messages.getString("ChatProcessor.BotReceivedFleeOrder"); //$NON-NLS-1$
             princess.log(getClass(), METHOD_NAME, LogLevel.DEBUG, msg);
-            princess.sendChat("Run Away!");
+            princess.sendChat(Messages.getString("ChatProcessor.BotRunAway")); //$NON-NLS-1$
             princess.setFallBack(true, msg);
             return;
         }
@@ -308,21 +308,21 @@ public class ChatProcessor {
         // Load a new behavior.
         if (command.toLowerCase().startsWith(ChatCommands.BEHAVIOR.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "No new behavior specified.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotNoBehavior"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
             String behaviorName = arguments[0].trim();
             BehaviorSettings newBehavior = BehaviorSettingsFactory.getInstance().getBehavior(behaviorName);
             if (newBehavior == null) {
-                msg = "Behavior '" + behaviorName + "' does not exist.";
+                msg = Messages.getString("ChatProcessor.BotBehavior") + behaviorName + Messages.getString("ChatProcessor.BotBehaviorDoesNotExist"); //$NON-NLS-1$ //$NON-NLS-2$
                 princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg);
                 princess.sendChat(msg);
                 return;
             }
             princess.setBehaviorSettings(newBehavior);
-            msg = "Behavior changed to " + princess.getBehaviorSettings().getDescription();
+            msg = Messages.getString("ChatProcessor.BotBehaviorChanged") + princess.getBehaviorSettings().getDescription(); //$NON-NLS-1$
             princess.sendChat(msg);
             return;
         }
@@ -330,8 +330,8 @@ public class ChatProcessor {
         // Adjust fall shame.
         if (command.toLowerCase().startsWith(ChatCommands.CAUTION.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid Syntax.  Should be 'princessName : caution : <+/->'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxCaution"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -341,7 +341,7 @@ public class ChatProcessor {
             int newFallShame = currentFallShame;
             newFallShame += princess.calculateAdjustment(adjustment);
             princess.getBehaviorSettings().setFallShameIndex(newFallShame);
-            msg = "Piloting Caution changed from " + currentFallShame + " to " +
+            msg = Messages.getString("ChatProcessor.BotCautionChangedFrom") + currentFallShame + Messages.getString("ChatProcessor.BotCautionChangedTo") + //$NON-NLS-1$ //$NON-NLS-2$
                   princess.getBehaviorSettings().getFallShameIndex();
             princess.sendChat(msg);
         }
@@ -349,8 +349,8 @@ public class ChatProcessor {
         // Adjust self preservation.
         if (command.toLowerCase().startsWith(ChatCommands.AVOID.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid Syntax.  Should be 'princessName : avoid : <+/->'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxAvoid"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -360,7 +360,7 @@ public class ChatProcessor {
             int newSelfPreservation = currentSelfPreservation;
             newSelfPreservation += princess.calculateAdjustment(adjustment);
             princess.getBehaviorSettings().setSelfPreservationIndex(newSelfPreservation);
-            msg = "Self Preservation changed from " + currentSelfPreservation + " to " +
+            msg = Messages.getString("ChatProcessor.BotSelfPreservationChangedFrom") + currentSelfPreservation + Messages.getString("ChatProcessor.BotSelfPreservationChangedTo") + //$NON-NLS-1$ //$NON-NLS-2$
                   princess.getBehaviorSettings().getSelfPreservationIndex();
             princess.sendChat(msg);
         }
@@ -368,8 +368,8 @@ public class ChatProcessor {
         // Adjust aggression.
         if (command.toLowerCase().startsWith(ChatCommands.AGGRESSION.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid Syntax.  Should be 'princessName : aggression : <+/->'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxAggression"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -379,7 +379,7 @@ public class ChatProcessor {
             int newAggression = currentAggression;
             newAggression += princess.calculateAdjustment(adjustment);
             princess.getBehaviorSettings().setHyperAggressionIndex(newAggression);
-            msg = "Aggression changed from " + currentAggression + " to " +
+            msg = Messages.getString("ChatProcessor.BotAggressionChanged") + currentAggression + Messages.getString("ChatProcessor.BotAggressionChangedTo") + //$NON-NLS-1$ //$NON-NLS-2$
                   princess.getBehaviorSettings().getHyperAggressionIndex();
             princess.sendChat(msg);
         }
@@ -387,8 +387,8 @@ public class ChatProcessor {
         // Adjust herd mentality.
         if (command.toLowerCase().startsWith(ChatCommands.HERDING.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid Syntax.  Should be 'princessName : herding : <+/->'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxHerding"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -398,7 +398,7 @@ public class ChatProcessor {
             int newHerding = currentHerding;
             newHerding += princess.calculateAdjustment(adjustment);
             princess.getBehaviorSettings().setHerdMentalityIndex(newHerding);
-            msg = "Herding changed from " + currentHerding + " to " +
+            msg = Messages.getString("ChatProcessor.BotHerdingChangedFrom") + currentHerding + Messages.getString("ChatProcessor.BotHerdingChangedTo") + //$NON-NLS-1$ //$NON-NLS-2$
                   princess.getBehaviorSettings().getHerdMentalityIndex();
             princess.sendChat(msg);
         }
@@ -406,8 +406,8 @@ public class ChatProcessor {
         // Adjust bravery.
         if (command.toLowerCase().startsWith(ChatCommands.BRAVERY.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid Syntax.  Should be 'princessName : brave : <+/->'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxBrave"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -417,7 +417,7 @@ public class ChatProcessor {
             int newBravery = currentBravery;
             newBravery += princess.calculateAdjustment(adjustment);
             princess.getBehaviorSettings().setBraveryIndex(newBravery);
-            msg = "Bravery changed from " + currentBravery + " to " +
+            msg = Messages.getString("ChatProcessor.BotBraveryChanged") + currentBravery + Messages.getString("ChatProcessor.BotBraveryChangedTo") + //$NON-NLS-1$ //$NON-NLS-2$
                   princess.getBehaviorSettings().getBraveryIndex();
             princess.sendChat(msg);
         }
@@ -425,16 +425,16 @@ public class ChatProcessor {
         // Specify a "strategic" building target.
         if (command.toLowerCase().startsWith(ChatCommands.TARGET.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid syntax.  Should be 'princessName : target : hexNumber'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxTarget"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
 
             String hex = arguments[0];
             if (hex.length() != 4 || !StringUtil.isPositiveInteger(hex)) {
-                msg = "Invalid hex number: " + hex;
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidHex") + hex; //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
@@ -443,35 +443,35 @@ public class ChatProcessor {
             int y = Integer.parseInt(hex.substring(2, 4)) - 1;
             Coords coords = new Coords(x, y);
             if (!princess.getGame().getBoard().contains(coords)) {
-                msg = "Board does not have hex " + hex;
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotNoHexOnBoard") + hex; //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
 
             princess.addStrategicBuildingTarget(coords);
-            msg = "Hex " + hex + " added to strategic targets list.";
+            msg = Messages.getString("ChatProcessor.BotHex") + hex + Messages.getString("ChatProcessor.BotAddedToTargetList"); //$NON-NLS-1$ //$NON-NLS-2$
             princess.sendChat(msg);
         }
 
         // Specify a priority unit target.
         if (command.toLowerCase().startsWith(ChatCommands.PRIORITIZE.getAbbreviation())) {
             if (arguments == null || arguments.length == 0) {
-                msg = "Invalid syntax.  Should be 'princessName : priority : unitId'.";
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidSyntaxPriority"); //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
             String id = arguments[0];
             if (!StringUtil.isPositiveInteger(id)) {
-                msg = "Invalid unit id number: " + id;
-                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage());
+                msg = Messages.getString("ChatProcessor.BotInvalidUnitId") + id; //$NON-NLS-1$
+                princess.log(getClass(), METHOD_NAME, LogLevel.WARNING, msg + "\n" + chatEvent.getMessage()); //$NON-NLS-1$
                 princess.sendChat(msg);
                 return;
             }
 
             princess.getBehaviorSettings().addPriorityUnit(id);
-            msg = "Unit " + id + " added to priority unit targets list.";
+            msg = Messages.getString("ChatProcessor.BotUnit") + id + Messages.getString("ChatProcessor.BotAddedToPriorityTargetList"); //$NON-NLS-1$ //$NON-NLS-2$
             princess.sendChat(msg);
         }
     }

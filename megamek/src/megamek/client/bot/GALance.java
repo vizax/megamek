@@ -32,8 +32,8 @@ public class GALance extends GA {
             int generations) {
         super(moves.size(), population, .7, .05, generations, .5);
         System.gc();
-        System.out.println("Generated move lance with population=" + population
-                + " and generations=" + generations);
+        System.out.println(Messages.getString("GALance.GeneratedLanceWithPopulation") + population //$NON-NLS-1$
+                + Messages.getString("GALance.GeneratedLanceWithGeneration") + generations); //$NON-NLS-1$
         this.tb = tb;
         this.moves = moves;
         this.enemy_array = tb.getEnemyEntities().toArray();

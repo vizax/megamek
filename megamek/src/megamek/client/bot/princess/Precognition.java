@@ -310,7 +310,7 @@ public class Precognition implements Runnable {
     }
 
     public void pause() {
-        final String METHOD_NAME = "pause()";
+        final String METHOD_NAME = "pause()"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -327,7 +327,7 @@ public class Precognition implements Runnable {
     }
 
     public synchronized void unPause() {
-        final String METHOD_NAME = "unpause()";
+        final String METHOD_NAME = "unpause()"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -344,7 +344,7 @@ public class Precognition implements Runnable {
      * something something.
      */
     public synchronized void wakeUp() {
-        final String METHOD_NAME = "wake_up()";
+        final String METHOD_NAME = "wake_up()"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -359,7 +359,7 @@ public class Precognition implements Runnable {
      * locations call this right before making a move. automatically pauses.
      */
     public void insureUpToDate() {
-        final String METHOD_NAME = "insureUpToDate()";
+        final String METHOD_NAME = "insureUpToDate()"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -393,9 +393,9 @@ public class Precognition implements Runnable {
                 Integer entityId = getDirtyUnits().pollFirst();
                 Entity entity = getGame().getEntity(entityId);
                 if (entity != null) {
-                    getOwner().log(getClass(), METHOD_NAME, "recalculating paths for " + entity.getDisplayName());
+                    getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.RecalculatingPaths") + entity.getDisplayName()); //$NON-NLS-1$
                     getPathEnumerator().recalculateMovesFor(entity);
-                    getOwner().log(getClass(), METHOD_NAME, "finished recalculating paths for " + entity
+                    getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.5") + entity //$NON-NLS-1$
                             .getDisplayName());
                 }
             }
@@ -405,7 +405,7 @@ public class Precognition implements Runnable {
     }
 
     public void run() {
-        final String METHOD_NAME = "run()";
+        final String METHOD_NAME = Messages.getString("Precognition.6"); //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -420,9 +420,9 @@ public class Precognition implements Runnable {
                     Entity entity = getGame().getEntity(getDirtyUnits().pollFirst());
                     if (entity != null) {
                         unPause();
-                        getOwner().log(getClass(), METHOD_NAME, "recalculating paths for " + entity.getDisplayName());
+                        getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.7") + entity.getDisplayName()); //$NON-NLS-1$
                         getPathEnumerator().recalculateMovesFor(entity);
-                        getOwner().log(getClass(), METHOD_NAME, "finished recalculating paths for " + entity
+                        getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.8") + entity //$NON-NLS-1$
                                 .getDisplayName());
                     }
                 } else if (getWaitWhenDone().get()) {
@@ -445,7 +445,7 @@ public class Precognition implements Runnable {
      * something to do
      */
     public synchronized void waitForUnpause() {
-        final String METHOD_NAME = "wait_for_unpause()";
+        final String METHOD_NAME = Messages.getString("Precognition.9"); //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -454,10 +454,10 @@ public class Precognition implements Runnable {
                     (getEventsToProcess().isEmpty() &&
                      getDirtyUnits().isEmpty()))) {
                 getOwner().log(getClass(), METHOD_NAME,
-                               "waitWhenDone = " + getWaitWhenDone() +
-                               " :: eventsToProcess = " +
+                               Messages.getString("Precognition.10") + getWaitWhenDone() + //$NON-NLS-1$
+                               Messages.getString("Precognition.11") + //$NON-NLS-1$
                                getEventsToProcess().size() +
-                               " :: dirtyUnits = " + getDirtyUnits().size());
+                               Messages.getString("Precognition.12") + getDirtyUnits().size()); //$NON-NLS-1$
                 getWaiting().set(true);
                 try {
                     wait();
@@ -476,19 +476,19 @@ public class Precognition implements Runnable {
      * if a unit has moved, my precaculated paths are no longer valid
      */
     public void processGameEvents() {
-        final String METHOD_NAME = "processGameEvents()";
+        final String METHOD_NAME = Messages.getString("Precognition.13"); //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
             LinkedList<GameEvent> eventsToProcessIterator = new LinkedList<>(getEventsToProcess());
             int numEvents = eventsToProcessIterator.size();
             for (int count = 0; count < numEvents; count++) {
-                getOwner().log(getClass(), METHOD_NAME, "Processing event " + (count + 1) + " out of " + numEvents);
+                getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.14") + (count + 1) + Messages.getString("Precognition.15") + numEvents); //$NON-NLS-1$ //$NON-NLS-2$
                 GameEvent event = eventsToProcessIterator.get(count);
                 if (event == null) {
                     continue;
                 }
-                getOwner().log(getClass(), METHOD_NAME, "Processing " + event.toString());
+                getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.16") + event.toString()); //$NON-NLS-1$
                 getEventsToProcess().remove(event);
                 if (event instanceof GameEntityChangeEvent) {
                     // for starters, ignore entity changes that don't happen during
@@ -517,15 +517,15 @@ public class Precognition implements Runnable {
                     if (position.equals(getPathEnumerator().getLastKnownCoords(entity.getId()))) {
                         continue; // no sense in updating a unit if it hasn't moved
                     }
-                    getOwner().log(getClass(), METHOD_NAME, "Received entity change event for "
-                                                            + changeEvent.getEntity().getDisplayName() + " (ID "
-                                                            + entity.getId() + ")");
+                    getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.17") //$NON-NLS-1$
+                                                            + changeEvent.getEntity().getDisplayName() + Messages.getString("Precognition.18") //$NON-NLS-1$
+                                                            + entity.getId() + Messages.getString("Precognition.19")); //$NON-NLS-1$
                     Integer entityId = changeEvent.getEntity().getId();
                     dirtifyUnit(entityId);
 
                 } else if (event instanceof GamePhaseChangeEvent) {
                     GamePhaseChangeEvent phaseChange = (GamePhaseChangeEvent) event;
-                    getOwner().log(getClass(), METHOD_NAME, "Phase change detected: " + phaseChange.getNewPhase()
+                    getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.20") + phaseChange.getNewPhase() //$NON-NLS-1$
                                                                                                    .name());
                     // this marks when I can all I can start recalculating paths.
                     // All units are dirty
@@ -539,7 +539,7 @@ public class Precognition implements Runnable {
                     }
                 }
             }
-            getOwner().log(getClass(), METHOD_NAME, "Events still to process: " + getEventsToProcess().size());
+            getOwner().log(getClass(), METHOD_NAME, Messages.getString("Precognition.21") + getEventsToProcess().size()); //$NON-NLS-1$
         } finally {
             getOwner().methodEnd(getClass(), METHOD_NAME);
         }
@@ -550,7 +550,7 @@ public class Precognition implements Runnable {
      * as any units who's moves contain that unit
      */
     public void dirtifyUnit(int id) {
-        final String METHOD_NAME = "dirtifyUnit(int)";
+        final String METHOD_NAME = Messages.getString("Precognition.22"); //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -592,9 +592,9 @@ public class Precognition implements Runnable {
                 }
 
                 if (toDirty.size() != 0) {
-                    String msg = "The following units have become dirty";
+                    String msg = Messages.getString("Precognition.23"); //$NON-NLS-1$
                     if (getGame().getEntity(id) != null) {
-                        msg += " as a result of a nearby move of " + getGame().getEntity(id).getDisplayName();
+                        msg += Messages.getString("Precognition.24") + getGame().getEntity(id).getDisplayName(); //$NON-NLS-1$
                     }
 
                     Iterator<Integer> dirtyIterator = toDirty.descendingIterator();
@@ -602,7 +602,7 @@ public class Precognition implements Runnable {
                         Integer i = dirtyIterator.next();
                         Entity e = getGame().getEntity(i);
                         if (e != null)
-                            msg += "\n  " + e.getDisplayName();
+                            msg += Messages.getString("Precognition.25") + e.getDisplayName(); //$NON-NLS-1$
                     }
                     getOwner().log(getClass(), METHOD_NAME, msg);
                 }
@@ -624,23 +624,23 @@ public class Precognition implements Runnable {
     public PathEnumerator getPathEnumerator() {
         PATH_ENUMERATOR_LOCK.readLock().lock();
         try {
-            getOwner().log(getClass(), "getPathEnumerator()()", LogLevel.DEBUG, "PATH_ENUMERATOR_LOCK read locked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.26"), LogLevel.DEBUG, Messages.getString("Precognition.27")); //$NON-NLS-1$ //$NON-NLS-2$
             return pathEnumerator;
         } finally {
             PATH_ENUMERATOR_LOCK.readLock().unlock();
-            getOwner().log(getClass(), "getPathEnumerator()()", LogLevel.DEBUG, "PATH_ENUMERATOR_LOCK read unlocked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.28"), LogLevel.DEBUG, Messages.getString("Precognition.29")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
     private void setPathEnumerator(PathEnumerator pathEnumerator) {
         PATH_ENUMERATOR_LOCK.writeLock().lock();
         try {
-            getOwner().log(getClass(), "setPathEnumerator(PathEnumerator)", LogLevel.DEBUG,
-                           "PATH_ENUMERATOR_LOCK write locked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.30"), LogLevel.DEBUG, //$NON-NLS-1$
+                           Messages.getString("Precognition.31")); //$NON-NLS-1$
             this.pathEnumerator = pathEnumerator;
         } finally {
-            getOwner().log(getClass(), "setPathEnumerator(PathEnumerator)", LogLevel.DEBUG,
-                           "PATH_ENUMERATOR_LOCK write unlocked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.32"), LogLevel.DEBUG, //$NON-NLS-1$
+                           Messages.getString("Precognition.33")); //$NON-NLS-1$
             PATH_ENUMERATOR_LOCK.writeLock().unlock();
         }
     }
@@ -676,22 +676,22 @@ public class Precognition implements Runnable {
     public void resetGame() {
         GAME_LOCK.writeLock();
         try {
-            getOwner().log(getClass(), "resetGame()", LogLevel.DEBUG, "GAME_LOCK write locked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.34"), LogLevel.DEBUG, Messages.getString("Precognition.35")); //$NON-NLS-1$ //$NON-NLS-2$
             game.reset();
         } finally {
             GAME_LOCK.writeLock().unlock();
-            getOwner().log(getClass(), "resetGame()", LogLevel.DEBUG, "GAME_LOCK write unlocked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.36"), LogLevel.DEBUG, Messages.getString("Precognition.37")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
     private IGame getGame() {
         GAME_LOCK.readLock().lock();
         try {
-            getOwner().log(getClass(), "getGame()", LogLevel.DEBUG, "GAME_LOCK read locked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.38"), LogLevel.DEBUG, Messages.getString("Precognition.39")); //$NON-NLS-1$ //$NON-NLS-2$
             return game;
         } finally {
             GAME_LOCK.readLock().unlock();
-            getOwner().log(getClass(), "getGame()", LogLevel.DEBUG, "GAME_LOCK read unlocked.");
+            getOwner().log(getClass(), Messages.getString("Precognition.40"), LogLevel.DEBUG, Messages.getString("Precognition.41")); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
    

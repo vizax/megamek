@@ -213,7 +213,7 @@ public class MoveOption extends MovePath {
                         * (1 - Math.pow(getCEntity().base_psr_odds, 2));
                 movement_threat += cur_threat;
                 if (centity.getTb().debug) {
-                    tv.add(cur_threat + " Movement Threat \r\n");
+                    tv.add(cur_threat + " Movement Threat \r\n"); //$NON-NLS-1$
                 }
             }
         }
@@ -272,7 +272,7 @@ public class MoveOption extends MovePath {
         }
         if ((last.getType() != MoveStepType.FORWARDS)
                 || (isClan
-                    && getGame().getOptions().booleanOption("no_clan_physical") && (getEntity()
+                    && getGame().getOptions().booleanOption("no_clan_physical") && (getEntity() //$NON-NLS-1$
                         .getSwarmAttackerId() == Entity.NONE))) {
             return false;
         }
@@ -348,9 +348,9 @@ public class MoveOption extends MovePath {
         IHex attHex = getGame().getBoard().getHex(ae.getPosition());
         if (attHex.containsTerrain(Terrains.WATER) && (attHex.surface() > attEl)) {
             toHita.addModifier(TargetRoll.IMPOSSIBLE,
-                    "Attacker in depth 2+ water");
+                    Messages.getString("MoveOption.AttackerTooDeep")); //$NON-NLS-1$
             toHitd.addModifier(TargetRoll.IMPOSSIBLE,
-                    "Defender in depth 2+ water");
+                    Messages.getString("MoveOption.DefenderTooDeep")); //$NON-NLS-1$
         } else if ((attHex.surface() == attEl) && (ae.height() > 0)) {
             apc = true;
         }
@@ -360,9 +360,9 @@ public class MoveOption extends MovePath {
                 pc = true;
             } else if (targHex.surface() > targEl) {
                 toHita.addModifier(TargetRoll.IMPOSSIBLE,
-                        "Attacker in depth 2+ water");
+                        Messages.getString("MoveOption.AttackerTooDeep")); //$NON-NLS-1$
                 toHitd.addModifier(TargetRoll.IMPOSSIBLE,
-                        "Defender in depth 2+ water");
+                        Messages.getString("MoveOption.DefenderTooDeep")); //$NON-NLS-1$
             }
         }
 
@@ -380,38 +380,38 @@ public class MoveOption extends MovePath {
 
         // heatBuildup
         if (ae.getHeatFiringModifier() != 0) {
-            toHita.addModifier(ae.getHeatFiringModifier(), "heatBuildup");
+            toHita.addModifier(ae.getHeatFiringModifier(), Messages.getString("MoveOption.6")); //$NON-NLS-1$
         }
         if (te.getHeatFiringModifier() != 0) {
-            toHitd.addModifier(te.getHeatFiringModifier(), "heatBuildup");
+            toHitd.addModifier(te.getHeatFiringModifier(), Messages.getString("MoveOption.7")); //$NON-NLS-1$
         }
         // target immobile
         if (te.isImmobile()) {
-            toHita.addModifier(-4, "target immobile");
+            toHita.addModifier(-4, Messages.getString("MoveOption.8")); //$NON-NLS-1$
         }
         if (ae.isImmobile()) {
-            toHitd.addModifier(-4, "target immobile");
+            toHitd.addModifier(-4, Messages.getString("MoveOption.9")); //$NON-NLS-1$
         }
         final int range = ae.getPosition().distance(te.getPosition());
         // target prone
         if (te.isProne()) {
             // easier when point-blank
             if (range == 1) {
-                toHita.addModifier(-2, "target prone and adjacent");
+                toHita.addModifier(-2, Messages.getString("MoveOption.10")); //$NON-NLS-1$
             }
             // harder at range
             if (range > 1) {
-                toHita.addModifier(1, "target prone and at range");
+                toHita.addModifier(1, Messages.getString("MoveOption.11")); //$NON-NLS-1$
             }
         }
         if (ae.isProne()) {
             // easier when point-blank
             if (range == 1) {
-                toHitd.addModifier(-2, "target prone and adjacent");
+                toHitd.addModifier(-2, Messages.getString("MoveOption.12")); //$NON-NLS-1$
             }
             // harder at range
             if (range > 1) {
-                toHitd.addModifier(1, "target prone and at range");
+                toHitd.addModifier(1, Messages.getString("MoveOption.13")); //$NON-NLS-1$
             }
         }
         return new int[] { toHita.getValue(), toHitd.getValue(), apc ? 1 : 0,
@@ -563,8 +563,8 @@ public class MoveOption extends MovePath {
 
     @Override
     public String toString() {
-        return getEntity().getShortName() + " " + getEntity().getId() + " "
-                + getFinalCoords() + " " + super.toString() + "\r\n Utility: "
-                + getUtility() + " \r\n" + tv + "\r\n";
+        return getEntity().getShortName() + Messages.getString("MoveOption.14") + getEntity().getId() + Messages.getString("MoveOption.15") //$NON-NLS-1$ //$NON-NLS-2$
+                + getFinalCoords() + Messages.getString("MoveOption.16") + super.toString() + Messages.getString("MoveOption.17") //$NON-NLS-1$ //$NON-NLS-2$
+                + getUtility() + Messages.getString("MoveOption.18") + tv + Messages.getString("MoveOption.19"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

@@ -119,8 +119,8 @@ public abstract class BotClient extends Client {
                     // Run bot's turn processing in a separate thread.
                     // So calling thread is free to process the other actions.
                     Thread worker = new Thread(new CalculateBotTurn(),
-                                               getName() + " Turn " + game.getTurnIndex()
-                                               + " Calc Thread"
+                                               getName() + Messages.getString("BotClient.0") + game.getTurnIndex() //$NON-NLS-1$
+                                               + Messages.getString("BotClient.1") //$NON-NLS-1$
                     );
                     worker.start();
                 }
@@ -338,7 +338,7 @@ public abstract class BotClient extends Client {
             //noinspection ResultOfMethodCallIgnored
             logDir.mkdir();
         }
-        String fileName = "Bot_" + getLocalPlayer().getName() + ".mul";
+        String fileName = "Bot_" + getLocalPlayer().getName() + ".mul"; //$NON-NLS-1$ //$NON-NLS-2$
         if (PreferenceManager.getClientPreferences().stampFilenames()) {
             fileName = StringUtil.addDateTimeStamp(fileName);
         }
@@ -437,7 +437,7 @@ public abstract class BotClient extends Client {
             return dest;
         }
 
-        System.out.println("Returning no deployment position; THIS IS BAD!");
+        System.out.println(Messages.getString("BotClient.NoDeloymentPosition")); //$NON-NLS-1$
         // If NONE of them are acceptable, then just return null.
         return null;
     }
@@ -492,10 +492,10 @@ public abstract class BotClient extends Client {
         weapon_count = 0;
         for (Mounted mounted : deployed_ent.getWeaponList()) {
             WeaponType wtype = (WeaponType) mounted.getType();
-            if ((!wtype.getName().equals("ATM 3"))
-                && (!wtype.getName().equals("ATM 6"))
-                && (!wtype.getName().equals("ATM 9"))
-                && (!wtype.getName().equals("ATM 12"))) {
+            if ((!wtype.getName().equals("ATM 3")) //$NON-NLS-1$
+                && (!wtype.getName().equals("ATM 6")) //$NON-NLS-1$
+                && (!wtype.getName().equals("ATM 9")) //$NON-NLS-1$
+                && (!wtype.getName().equals("ATM 12"))) { //$NON-NLS-1$
                 if (deployed_ent.getC3Master() != null) {
                     av_range += wtype.getLongRange() * 1.25;
                 } else {
@@ -952,10 +952,10 @@ public abstract class BotClient extends Client {
     }
 
     public String getRandomBotMessage() {
-        String message = "";
+        String message = ""; //$NON-NLS-1$
 
         try {
-            String scrapFile = "./mmconf/botmessages.txt";
+            String scrapFile = "./mmconf/botmessages.txt"; //$NON-NLS-1$
             FileInputStream fis = new FileInputStream(scrapFile);
             BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
             while (dis.ready()) {
@@ -973,7 +973,7 @@ public abstract class BotClient extends Client {
             return null;
         }// CYA exception
         catch (Exception ex) {
-            System.err.println("Error while reading ./mmconf/botmessages.txt.");
+            System.err.println(Messages.getString("BotClient.ErrorReadingBotMessages")); //$NON-NLS-1$
             ex.printStackTrace();
             return null;
         }
@@ -990,7 +990,7 @@ public abstract class BotClient extends Client {
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                                                  ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        textArea.setText("<pre>" + message + "</pre>");
+        textArea.setText("<pre>" + message + "</pre>"); //$NON-NLS-1$ //$NON-NLS-2$
         JOptionPane.showMessageDialog(frame, scrollPane, title, JOptionPane.ERROR_MESSAGE);
     }
 
@@ -1027,7 +1027,7 @@ public abstract class BotClient extends Client {
 
         RankedCoords(Coords coords, double fitness) {
             if (coords == null) {
-                throw new IllegalArgumentException("Coords cannot be null.");
+                throw new IllegalArgumentException(Messages.getString("BotClient.CoordsCannotBeNull")); //$NON-NLS-1$
             }
             this.coords = coords;
             this.fitness = fitness;
@@ -1040,7 +1040,7 @@ public abstract class BotClient extends Client {
         @SuppressWarnings("unused")
         public void setCoords(Coords coords) {
             if (coords == null) {
-                throw new IllegalArgumentException("Coords cannot be null.");
+                throw new IllegalArgumentException(Messages.getString("BotClient.CoordsCannotBeNull")); //$NON-NLS-1$
             }
             this.coords = coords;
         }
@@ -1087,9 +1087,9 @@ public abstract class BotClient extends Client {
 
         @Override
         public String toString() {
-            return "RankedCoords{" +
-                   "coords=" + coords +
-                   ", fitness=" + fitness +
+            return "RankedCoords{" + //$NON-NLS-1$
+                   "coords=" + coords + //$NON-NLS-1$
+                   ", fitness=" + fitness + //$NON-NLS-1$
                    '}';
         }
 

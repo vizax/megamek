@@ -63,8 +63,8 @@ public class BotConfiguration {
 
     public boolean isDebug() {
         try {
-            if ("true".equalsIgnoreCase(BotProperties.getProperty("Debug",
-                    "false"))) {
+            if ("true".equalsIgnoreCase(BotProperties.getProperty("Debug", //$NON-NLS-1$ //$NON-NLS-2$
+                    "false"))) { //$NON-NLS-1$
                 return true;
             }
             return false;

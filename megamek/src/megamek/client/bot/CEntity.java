@@ -1548,7 +1548,7 @@ public class CEntity {
             }
 
             // IS plasma rifle
-            if (wt.getInternalName() == "ISPlasmaRifle") {
+            if (wt.getInternalName() == "ISPlasmaRifle") { //$NON-NLS-1$
 
                 damage_value = 12.0;
 
@@ -1559,7 +1559,7 @@ public class CEntity {
             }
 
             // Clan plasma cannon
-            if (wt.getInternalName() == "CLPlasmaCannon") {
+            if (wt.getInternalName() == "CLPlasmaCannon") { //$NON-NLS-1$
 
                 damage_value = 10.5;
 
@@ -1593,8 +1593,8 @@ public class CEntity {
                 || (raw_damage_array[2] < 0) || (raw_damage_array[3] < 0)) {
 
             System.out
-                    .println("Weapons characterization: negative damage for weapon "
-                            + weapon.getName() + ".");
+                    .println(Messages.getString("CEntity.NegativeDamageForWeapon") //$NON-NLS-1$
+                            + weapon.getName() + "."); //$NON-NLS-1$
 
             raw_damage_array[0] = 1.0;
             raw_damage_array[1] = 1.0;
@@ -1674,10 +1674,10 @@ public class CEntity {
 
                         // Really hate to depend on string comparisons but
                         // nothing else is available
-                        if (bin_type.getShortName().contains("SRM")) {
+                        if (bin_type.getShortName().contains("SRM")) { //$NON-NLS-1$
                             range_flags[0] = true;
                         } else {
-                            if (bin_type.getShortName().contains("LRM")
+                            if (bin_type.getShortName().contains("LRM") //$NON-NLS-1$
                                     && !AmmoType.canDeliverMinefield(bin_type)) {
                                 range_flags[2] = true;
                             }
