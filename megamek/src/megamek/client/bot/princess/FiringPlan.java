@@ -146,23 +146,23 @@ public class FiringPlan extends ArrayList<WeaponFireInfo> implements
      */
     String getDebugDescription(boolean detailed) {
         if (size() == 0) {
-            return "Empty FiringPlan!";
+            return Messages.getString("FiringPlan.EmptyFiringPlan"); //$NON-NLS-1$
         }
-        StringBuilder description = new StringBuilder("Firing Plan for ").append(get(0).getShooter().getChassis())
-                                                                         .append(" at ")
+        StringBuilder description = new StringBuilder(Messages.getString("FiringPlan.FiringPlanFor")).append(get(0).getShooter().getChassis()) //$NON-NLS-1$
+                                                                         .append(Messages.getString("FiringPlan.At")) //$NON-NLS-1$
                                                                          .append(getTarget().getDisplayName())
-                                                                         .append("; ").append(Integer.toString(size()))
-                                                                         .append(" weapons fired ");
+                                                                         .append("; ").append(Integer.toString(size())) //$NON-NLS-1$
+                                                                         .append(Messages.getString("FiringPlan.WeaponsFired")); //$NON-NLS-1$
         if (detailed) {
             for (WeaponFireInfo weaponFireInfo : this) {
-                description.append("\n\t\t").append(weaponFireInfo.getDebugDescription());
+                description.append("\n\t\t").append(weaponFireInfo.getDebugDescription()); //$NON-NLS-1$
             }
         }
-        DecimalFormat decimalFormat = new DecimalFormat("0.00000");
-        description.append("\n\tTotal Expected Damage=").append(decimalFormat.format(getExpectedDamage()));
-        description.append("\n\tTotal Expected Criticals=").append(decimalFormat.format(getExpectedCriticals()));
-        description.append("\n\tKill Probability=").append(decimalFormat.format(getKillProbability()));
-        description.append("\n\tUtility=").append(decimalFormat.format(getUtility()));
+        DecimalFormat decimalFormat = new DecimalFormat("0.00000"); //$NON-NLS-1$
+        description.append(Messages.getString("FiringPlan.TotalDamageExpectedEquals")).append(decimalFormat.format(getExpectedDamage())); //$NON-NLS-1$
+        description.append(Messages.getString("FiringPlan.TotalExpectedCritsEquals")).append(decimalFormat.format(getExpectedCriticals())); //$NON-NLS-1$
+        description.append(Messages.getString("FiringPlan.KillProbablilityEquals")).append(decimalFormat.format(getKillProbability())); //$NON-NLS-1$
+        description.append(Messages.getString("FiringPlan.UtilityEquals")).append(decimalFormat.format(getUtility())); //$NON-NLS-1$
         return description.toString();
     }
 
@@ -212,7 +212,7 @@ public class FiringPlan extends ArrayList<WeaponFireInfo> implements
     
     @Override
     public String toString() {
-        String desc = "Utility: " + utility + " ";
+        String desc = Messages.getString("FiringPlan.Utility") + utility + " "; //$NON-NLS-1$ //$NON-NLS-2$
         desc += super.toString();
         return desc;
     }
@@ -287,14 +287,14 @@ public class FiringPlan extends ArrayList<WeaponFireInfo> implements
     }
 
     public String getWeaponNames() {
-        StringBuilder out = new StringBuilder("");
+        StringBuilder out = new StringBuilder(""); //$NON-NLS-1$
         for (WeaponFireInfo wfi : this) {
             if (!StringUtil.isNullOrEmpty(out)) {
-                out.append(",");
+                out.append(","); //$NON-NLS-1$
             }
 
             if (wfi.getWeapon() == null) {
-                out.append("null");
+                out.append("null"); //$NON-NLS-1$
                 continue;
             }
             out.append(wfi.getWeapon().getName());
