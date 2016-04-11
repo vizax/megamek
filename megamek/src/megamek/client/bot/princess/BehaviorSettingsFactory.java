@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class BehaviorSettingsFactory {
 
-    private static final String PRINCESS_BEHAVIOR_PATH = "mmconf" + File.separator + "princessBehaviors.xml";
+    private static final String PRINCESS_BEHAVIOR_PATH = "mmconf" + File.separator + "princessBehaviors.xml"; //$NON-NLS-1$ //$NON-NLS-2$
 
     protected final Map<String, BehaviorSettings> behaviorMap = new HashMap<>();
     private static BehaviorSettingsFactory instance = new BehaviorSettingsFactory();
@@ -127,8 +127,8 @@ public class BehaviorSettingsFactory {
         try {
             File behaviorFile = new File(PRINCESS_BEHAVIOR_PATH);
             if (!behaviorFile.exists() || !behaviorFile.isFile()) {
-                logger.log(BehaviorSettingsFactory.class, "buildPrincessBehaviorDoc()", LogLevel.ERROR,
-                        "Could not load " + PRINCESS_BEHAVIOR_PATH);
+                logger.log(BehaviorSettingsFactory.class, "buildPrincessBehaviorDoc()", LogLevel.ERROR, //$NON-NLS-1$
+                        Messages.getString("BehaviorSettingsFactory.CouldNotLoad") + PRINCESS_BEHAVIOR_PATH); //$NON-NLS-1$
                 return null;
             }
             try(InputStream is = new FileInputStream(behaviorFile)) {
@@ -156,7 +156,7 @@ public class BehaviorSettingsFactory {
                 BehaviorSettings behaviorSettings;
                 for (int i = 0; i < root.getChildNodes().getLength(); i++) {
                     Node child = root.getChildNodes().item(i);
-                    if (!"behavior".equalsIgnoreCase(child.getNodeName())) {
+                    if (!"behavior".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                         continue;
                     }
                     behaviorSettings = new BehaviorSettings((Element) child);
@@ -179,7 +179,7 @@ public class BehaviorSettingsFactory {
      * @return TRUE if the save is successful.
      */
     public boolean saveBehaviorSettings(boolean includeTargets) {
-        final String METHOD_NAME = "saveBehaviorSettings(boolean)";
+        final String METHOD_NAME = "saveBehaviorSettings(boolean)"; //$NON-NLS-1$
         init(false);
 
         try {
@@ -187,18 +187,18 @@ public class BehaviorSettingsFactory {
             if (!behaviorFile.exists()) {
                 if (!behaviorFile.createNewFile()) {
                     logger.log(BehaviorSettingsFactory.class, METHOD_NAME, LogLevel.ERROR,
-                            "Could not create " + PRINCESS_BEHAVIOR_PATH);
+                            Messages.getString("BehaviorSettingsFactory.CouldNotCreate") + PRINCESS_BEHAVIOR_PATH); //$NON-NLS-1$
                     return false;
                 }
             }
             if (!behaviorFile.canWrite()) {
                 logger.log(BehaviorSettingsFactory.class, METHOD_NAME, LogLevel.ERROR,
-                        "Could not write to " + PRINCESS_BEHAVIOR_PATH);
+                        Messages.getString("BehaviorSettingsFactory.CouldNotWrite") + PRINCESS_BEHAVIOR_PATH); //$NON-NLS-1$
                 return false;
             }
 
             Document behaviorDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-            Node rootNode = behaviorDoc.createElement("princessBehaviors");
+            Node rootNode = behaviorDoc.createElement("princessBehaviors"); //$NON-NLS-1$
             synchronized (behaviorMap) {
                 for (String key : behaviorMap.keySet()) {
                     BehaviorSettings settings = behaviorMap.get(key);
@@ -208,8 +208,8 @@ public class BehaviorSettingsFactory {
             behaviorDoc.appendChild(rootNode);
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
             DOMSource source = new DOMSource(behaviorDoc);
             try(Writer writer = new FileWriter(behaviorFile)) {
                 StreamResult result = new StreamResult(writer);
@@ -251,7 +251,7 @@ public class BehaviorSettingsFactory {
      * Strategic Targets: None
      */
     public final BehaviorSettings BERSERK_BEHAVIOR = buildBerserkBehavior();
-    public static final String BERSERK_BEHAVIOR_DESCRIPTION = "BERSERK";
+    public static final String BERSERK_BEHAVIOR_DESCRIPTION = "BERSERK"; //$NON-NLS-1$
 
     private BehaviorSettings buildBerserkBehavior() {
         try {
@@ -268,7 +268,7 @@ public class BehaviorSettingsFactory {
             berserkBehavior.setBraveryIndex(9);
             return berserkBehavior;
         } catch (Exception e) {
-            logger.log(BehaviorSettingsFactory.class, "buildBerserkBehavior", e);
+            logger.log(BehaviorSettingsFactory.class, "buildBerserkBehavior", e); //$NON-NLS-1$
             return null;
         }
     }
@@ -286,7 +286,7 @@ public class BehaviorSettingsFactory {
      * Strategic Targets: None
      */
     public final BehaviorSettings COWARDLY_BEHAVIOR = buildCowardlyBehavior();
-    public static final String COWARDLY_BEHAVIOR_DESCRIPTION = "COWARDLY";
+    public static final String COWARDLY_BEHAVIOR_DESCRIPTION = "COWARDLY"; //$NON-NLS-1$
 
     private BehaviorSettings buildCowardlyBehavior() {
         try {
@@ -303,7 +303,7 @@ public class BehaviorSettingsFactory {
             cowardlyBehavior.setBraveryIndex(2);
             return cowardlyBehavior;
         } catch (Exception e) {
-            logger.log(BehaviorSettingsFactory.class, "buildCowardlyBehavior", e);
+            logger.log(BehaviorSettingsFactory.class, "buildCowardlyBehavior", e); //$NON-NLS-1$
             return null;
         }
     }
@@ -321,7 +321,7 @@ public class BehaviorSettingsFactory {
      * Strategic Targets: None
      */
     public final BehaviorSettings ESCAPE_BEHAVIOR = buildEscapeBehavior();
-    public static final String ESCAPE_BEHAVIOR_DESCRIPTION = "ESCAPE";
+    public static final String ESCAPE_BEHAVIOR_DESCRIPTION = "ESCAPE"; //$NON-NLS-1$
 
     private BehaviorSettings buildEscapeBehavior() {
         try {
@@ -338,7 +338,7 @@ public class BehaviorSettingsFactory {
             escapeBehavior.setBraveryIndex(2);
             return escapeBehavior;
         } catch (Exception e) {
-            logger.log(BehaviorSettingsFactory.class, "buildEscapeBehavior", e);
+            logger.log(BehaviorSettingsFactory.class, "buildEscapeBehavior", e); //$NON-NLS-1$
             return null;
         }
     }
@@ -356,7 +356,7 @@ public class BehaviorSettingsFactory {
      * Strategic Targets: None <br>
      */
     public final BehaviorSettings DEFAULT_BEHAVIOR = buildDefaultBehavior();
-    public static final String DEFAULT_BEHAVIOR_DESCRIPTION = "DEFAULT";
+    public static final String DEFAULT_BEHAVIOR_DESCRIPTION = "DEFAULT"; //$NON-NLS-1$
 
     private BehaviorSettings buildDefaultBehavior() {
         try {
@@ -373,7 +373,7 @@ public class BehaviorSettingsFactory {
             defaultBehavior.setBraveryIndex(5);
             return defaultBehavior;
         } catch (Exception e) {
-            logger.log(BehaviorSettingsFactory.class, "buildDefaultBehavior", e);
+            logger.log(BehaviorSettingsFactory.class, "buildDefaultBehavior", e); //$NON-NLS-1$
             return null;
         }
     }

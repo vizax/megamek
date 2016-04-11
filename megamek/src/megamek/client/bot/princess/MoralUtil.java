@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MoralUtil implements IMoralUtil {
 
-    private static final DecimalFormat DEC_FORMAT = new DecimalFormat("0.00");
+    private static final DecimalFormat DEC_FORMAT = new DecimalFormat("0.00"); //$NON-NLS-1$
 
     private final Set<Integer> BROKEN_UNITS = Collections.newSetFromMap(new ConcurrentHashMap<Integer, Boolean>());
 
@@ -57,41 +57,41 @@ public class MoralUtil implements IMoralUtil {
 
     @Override
     public void checkMoral(boolean forcedWithdrawal, int bravery, int selfPreservation, IPlayer player, IGame game) {
-        StringBuilder logMsg = new StringBuilder("Starting moral checks for ").append(player.getName());
+        StringBuilder logMsg = new StringBuilder(Messages.getString("MoralUtil.MoralChecks")).append(player.getName()); //$NON-NLS-1$
 
         try {
 
             // These mods don't vary by unit.
             int bvMod = calcBvRatioMod(player, game, logMsg);
-            logMsg.append(" (").append(bvMod >= 0 ? "+" : "").append(bvMod).append(")");
+            logMsg.append(" (").append(bvMod >= 0 ? "+" : "").append(bvMod).append(")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
             int braveryMod = calcBehaviorMod(bravery);
-            logMsg.append("\n\tBravery ").append(bravery).append(" (").append(braveryMod >= 0 ? "+" : "")
-                  .append(braveryMod).append(")");
+            logMsg.append(Messages.getString("MoralUtil.Bravery")).append(bravery).append(" (").append(braveryMod >= 0 ? "+" : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                  .append(braveryMod).append(")"); //$NON-NLS-1$
 
             int selfPreservationMod = -calcBehaviorMod(selfPreservation);
-            logMsg.append("\n\tSelf Preservation ").append(selfPreservation).append(" (")
-                  .append(selfPreservationMod >= 0 ? "+" : "").append(selfPreservationMod).append(")");
+            logMsg.append(Messages.getString("MoralUtil.SelfPreservation")).append(selfPreservation).append(" (") //$NON-NLS-1$ //$NON-NLS-2$
+                  .append(selfPreservationMod >= 0 ? "+" : "").append(selfPreservationMod).append(")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
             // Loop through all the units controlled by this player.
             for (Entity unit : game.getPlayerEntities(player, true)) {
 
-                logMsg.append("\n\tUnit ").append(unit.getDisplayName());
+                logMsg.append(Messages.getString("MoralUtil.Unit")).append(unit.getDisplayName()); //$NON-NLS-1$
 
                 // If the unit is already off board, it doesn't really matter.
                 if (unit.isOffBoard() || (unit.getPosition() == null)) {
-                    logMsg.append("\n\t\tIs off board; skipping.");
+                    logMsg.append(Messages.getString("MoralUtil.UnitOffBoard")); //$NON-NLS-1$
                     continue;
                 }
 
                 // If this unit is already broken, we need to check to see if it will rally.
                 int unitId = unit.getId();
                 boolean rally = BROKEN_UNITS.contains(unitId);
-                logMsg.append("\n\t\tNeeds to rally: ").append(rally);
+                logMsg.append(Messages.getString("MoralUtil.NeedsToRally")).append(rally); //$NON-NLS-1$
 
                 // Base target number is 2 for a regular check or 6 for a rally check.
                 int targetNumber = rally ? 6 : 2;
-                logMsg.append("\n\t\tBase Target Number = ").append(targetNumber);
+                logMsg.append(Messages.getString("MoralUtil.BaseTargetNumber")).append(targetNumber); //$NON-NLS-1$
 
                 // If the unit is crippled and forced withdrawal is in effect, the unit will automatically break.
                 targetNumber += calcDamageMod(unit, forcedWithdrawal, logMsg);
@@ -107,7 +107,7 @@ public class MoralUtil implements IMoralUtil {
                 targetNumber += braveryMod;
                 targetNumber += selfPreservationMod;
                 targetNumber += bvMod;
-                logMsg.append("\n\t\tFinal Target Number = ").append(targetNumber);
+                logMsg.append(Messages.getString("MoralUtil.FinalTargetNumber")).append(targetNumber); //$NON-NLS-1$
 
                 // If the target number is 12+ or 2-, there's no point in rolling.
                 if (targetNumber >= 12) {
@@ -123,7 +123,7 @@ public class MoralUtil implements IMoralUtil {
 
                 // Roll the moral check.
                 int roll = rollDice();
-                logMsg.append("\n\t\tRolled ").append(roll);
+                logMsg.append(Messages.getString("MoralUtil.Rolled")).append(roll); //$NON-NLS-1$
                 if (roll < targetNumber) {
                     addBrokenUnit(unitId);
                 } else if (rally) {
@@ -131,7 +131,7 @@ public class MoralUtil implements IMoralUtil {
                 }
             }
         } finally {
-            logger.log(getClass(), "checkMoral(boolean, int, int, IPlayer, IGame)", LogLevel.INFO, logMsg);
+            logger.log(getClass(), "checkMoral(boolean, int, int, IPlayer, IGame)", LogLevel.INFO, logMsg); //$NON-NLS-1$
         }
     }
 
@@ -180,7 +180,7 @@ public class MoralUtil implements IMoralUtil {
 
         // The target number mod is based on the friendly : enemy BV ratio.
         float ratio = (float) friendlyBv / enemyBv;
-        logMsg.append("\n\tBV Ratio = ").append(friendlyBv).append(" / ").append(enemyBv).append(" = ")
+        logMsg.append(Messages.getString("MoralUtil.BvRatio")).append(friendlyBv).append(" / ").append(enemyBv).append(" = ") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               .append(DEC_FORMAT.format(ratio));
 
         if (ratio >= 3.0) {
@@ -236,12 +236,12 @@ public class MoralUtil implements IMoralUtil {
 
         // Crippled units automatically withdraw if Forced Withdrawal is in effect.
         if (unit.isCrippled() && forcedWithdrawal) {
-            logMsg.append("\n\t\tCrippled and forced to withdraw.");
+            logMsg.append(Messages.getString("MoralUtil.CrippledForceToWithdraw")); //$NON-NLS-1$
             return 12;
         }
 
         int dmgLevel = unit.getDamageLevel();
-        logMsg.append("\n\t\tDamage Level ").append(dmgLevel).append(" (+").append(dmgLevel).append(")");
+        logMsg.append(Messages.getString("MoralUtil.DamageLevel")).append(dmgLevel).append(" (+").append(dmgLevel).append(")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return dmgLevel;
     }
 
@@ -259,18 +259,18 @@ public class MoralUtil implements IMoralUtil {
         }
 
         if (skillAverage >= greenThreshold) {
-            logMsg.append("\n\t\tGreen unit (+0)");
+            logMsg.append("\n\t\tGreen unit (+0)"); //$NON-NLS-1$
             return 0;
         }
         if (skillAverage >= regularThreshold) {
-            logMsg.append("\n\t\tRegular unit (-1)");
+            logMsg.append("\n\t\tRegular unit (-1)"); //$NON-NLS-1$
             return -1;
         }
         if (skillAverage >= veteranThreshold) {
-            logMsg.append("\n\t\tVeteran unit (-2)");
+            logMsg.append("\n\t\tVeteran unit (-2)"); //$NON-NLS-1$
             return -2;
         }
-        logMsg.append("\n\t\tElite unit (-3)");
+        logMsg.append("\n\t\tElite unit (-3)"); //$NON-NLS-1$
         return -3;
     }
 

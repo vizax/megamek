@@ -6,25 +6,25 @@ package megamek.client.bot.princess;
  * @since 10/24/2014 9:57 AM
  */
 public enum ChatCommands {
-    FLEE("fl", "princessName: flee", "Causes princess-controlled units to start fleeing the board, regardless of " +
-                                     "damage level or Forced Withdrawal setting."),
-    VERBOSE("ve", "princessName: verbose : <error/warning/info/debug>", "Sets princess's verbosity level."),
-    BEHAVIOR("be", "princessName: behavior : behaviorName", "Change's princess's behavior to the named behavior."),
-    CAUTION("ca", "princessName: caution : <+/->", "Modifies princess's Piloting Caution setting. Each '+' increases " +
-                                                   "it by 1 and each '-' decreases it by one."),
-    AVOID("av", "princessName: avoid : <+/->", "Modifies princess's Self Preservation setting. Each '+' increases it " +
-                                               "by 1 and each '-' decreases it by one."),
-    AGGRESSION("ag", "princessName: aggression : <+/->", "Modifies princess's Aggression setting. Each '+' increases " +
-                                                         "it by 1 and each '-' decreases it by one."),
-    HERDING("he", "princessName: herd : <+/->", "Modifies princess's Herding setting. Each '+' increases it by 1 and " +
-                                                "each '-' decreases it by one."),
-    BRAVERY("br", "princessName: brave : <+/->", "Modifies princess's Bravery setting. Each '+' increases it by 1 " +
-                                                 "and each '-' decreases it by one."),
-    TARGET("ta", "princessName: target : hexNumber", "Adds the specified hex to princess's list of Strategic Targets."),
-    PRIORITIZE("pr", "princessName: prioritize : unitId", "Adds the specified unit to princess's Priority Targets " +
-                                                          "list."),
-    SHOW_BEHAVIOR("sh", "princessName: showBehavior", "Princess will state the name of her current behavior."),
-    LIST__COMMANDS("li", "princessName: listCommands", "Displays this list of commands.");
+    FLEE("fl", "princessName: flee", Messages.getString("ChatCommands.BotFleeCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                     Messages.getString("ChatCommands.BotFleeCmdDescriptionCont")), //$NON-NLS-1$
+    VERBOSE("ve", "princessName: verbose : <error/warning/info/debug>", Messages.getString("ChatCommands.BotVerbosityCmdDescription")), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    BEHAVIOR("be", "princessName: behavior : behaviorName", Messages.getString("ChatCommands.BotBehaviorCmdDescription")), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    CAUTION("ca", "princessName: caution : <+/->", Messages.getString("ChatCommands.BotCautionCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                   Messages.getString("ChatCommands.BotCautionCmdDescriptionCont")), //$NON-NLS-1$
+    AVOID("av", "princessName: avoid : <+/->", Messages.getString("ChatCommands.BotAvoidCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                               Messages.getString("ChatCommands.BotAvoidCmdDescriptionCont")), //$NON-NLS-1$
+    AGGRESSION("ag", "princessName: aggression : <+/->", Messages.getString("ChatCommands.BotAggressionCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                         Messages.getString("ChatCommands.BotAggressionCmdDescriptionCont")), //$NON-NLS-1$
+    HERDING("he", "princessName: herd : <+/->", Messages.getString("ChatCommands.BotHerdingCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                Messages.getString("ChatCommands.BotHerdingCmdDescriptionCont")), //$NON-NLS-1$
+    BRAVERY("br", "princessName: brave : <+/->", Messages.getString("ChatCommands.BotBraveryCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                 Messages.getString("ChatCommands.BotBraveryCmdDescriptionCont")), //$NON-NLS-1$
+    TARGET("ta", "princessName: target : hexNumber", Messages.getString("ChatCommands.BotTargetHexCmdDescription")), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    PRIORITIZE("pr", "princessName: prioritize : unitId", Messages.getString("ChatCommands.BotPrioritizeCmdDescription") + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                                          Messages.getString("ChatCommands.BotPrioritizeCmdDescriptionCont")), //$NON-NLS-1$
+    SHOW_BEHAVIOR("sh", "princessName: showBehavior", Messages.getString("ChatCommands.BotShowBehaviorCmdDescription")), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    LIST__COMMANDS("li", "princessName: listCommands", Messages.getString("ChatCommands.BotListCmdDescription")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     private final String abbreviation;
     private final String syntax;

@@ -91,7 +91,7 @@ public class BotGeometry {
 
         @Override
         public String toString() {
-            return "Facing " + getFacing() + "; " + (getCoords() == null ? "null" : getCoords().toString());
+            return "Facing " + getFacing() + "; " + (getCoords() == null ? "null" : getCoords().toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }
 
@@ -126,7 +126,7 @@ public class BotGeometry {
          */
         public HexLine(Coords c, int dir, Princess owner) {
             @SuppressWarnings("unused")
-            final String METHOD_NAME = "HexLine(Coords, int)";
+            final String METHOD_NAME = "HexLine(Coords, int)"; //$NON-NLS-1$
 
             this.owner = owner;
 
@@ -146,7 +146,7 @@ public class BotGeometry {
          * and 0 if the point is on the line
          */
         public int judgePoint(Coords c) {
-            final String METHOD_NAME = "judgePoint(Coords)";
+            final String METHOD_NAME = "judgePoint(Coords)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -168,14 +168,14 @@ public class BotGeometry {
          * returns 0 if the area is divided by the line
          */
         public int judgeArea(ConvexBoardArea a) {
-            final String METHOD_NAME = "judgeArea(ConvexBoardArea)";
+            final String METHOD_NAME = "judgeArea(ConvexBoardArea)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
                 boolean flip = getDirection() > 2;
                 HexLine[] edges = a.getEdges();
                 if ((edges[getDirection()] == null) || (edges[(getDirection() + 3) % 6] == null)) {
-                    System.err.println(new IllegalStateException("Detection of NULL edges in ConvexBoardArea :: " +
+                    System.err.println(new IllegalStateException(Messages.getString("BotGeometry.DetectNullEdgesInBoard") + //$NON-NLS-1$
                                                                  a.toString()));
                     return 0;
                 }
@@ -204,7 +204,7 @@ public class BotGeometry {
          * Note that the function getXfromY would be multvalued
          */
         public int getYfromX(int x) {
-            final String METHOD_NAME = "getYfromX(int)";
+            final String METHOD_NAME = "getYfromX(int)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -226,7 +226,7 @@ public class BotGeometry {
          * if lines are parallel (even if they are coincident) returns null
          */
         public Coords getIntersection(HexLine h) {
-            final String METHOD_NAME = "getIntersection(HexLine)";
+            final String METHOD_NAME = "getIntersection(HexLine)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -254,7 +254,7 @@ public class BotGeometry {
          * line to another point
          */
         public Coords getClosestPoint(Coords c) {
-            final String METHOD_NAME = "getClosestPoint(Coords)";
+            final String METHOD_NAME = "getClosestPoint(Coords)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -319,7 +319,7 @@ public class BotGeometry {
 
         @Override
         public String toString() {
-            return "Intercept " + getIntercept() + ", Direction " + getDirection();
+            return "Intercept " + getIntercept() + ", Direction " + getDirection(); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -370,14 +370,14 @@ public class BotGeometry {
 
         @Override
         public String toString() {
-            StringBuilder msg = new StringBuilder("Edges:");
+            StringBuilder msg = new StringBuilder("Edges:"); //$NON-NLS-1$
             HexLine[] edges = getEdges();
             for (int i = 0; i < edges.length; i++) {
                 if (i != 0) {
-                    msg.append("; ");
+                    msg.append("; "); //$NON-NLS-1$
                 }
                 if (edges[i] == null) {
-                    msg.append("null");
+                    msg.append("null"); //$NON-NLS-1$
                 } else {
                     msg.append(edges[i].toString());
                 }
@@ -386,7 +386,7 @@ public class BotGeometry {
         }
 
         void addCoordFacingCombos(Iterator<CoordFacingCombo> cfit) {
-            final String METHOD_NAME = "addCoordFacingCombos(Iterator<CoordFacingCombo>)";
+            final String METHOD_NAME = "addCoordFacingCombos(Iterator<CoordFacingCombo>)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -404,7 +404,7 @@ public class BotGeometry {
          * false if it is not
          */
         boolean contains(Coords c) {
-            final String METHOD_NAME = "contains(Coords)";
+            final String METHOD_NAME = "contains(Coords)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -427,7 +427,7 @@ public class BotGeometry {
          * expands the board area to include point onc
          */
         void expandToInclude(Coords onc) {
-            final String METHOD_NAME = "expandToInclude(Coords)";
+            final String METHOD_NAME = "expandToInclude(Coords)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -447,13 +447,13 @@ public class BotGeometry {
          * Returns a vertex, with zero starting at the upper left of the hex
          */
         Coords getVertexNum(int i) {
-            final String METHOD_NAME = "getVertexNum(int)";
+            final String METHOD_NAME = "getVertexNum(int)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
                 HexLine[] edges = getEdges();
                 if (edges[i] == null || edges[(i + 1) % 6] == null) {
-                    System.err.println(new IllegalStateException("Edge[" + i + "] is NULL."));
+                    System.err.println(new IllegalStateException(Messages.getString("BotGeometry.Edge") + i + Messages.getString("BotGeometry.IsNull"))); //$NON-NLS-1$ //$NON-NLS-2$
                     return null;
                 }
                 return edges[i].getIntersection(edges[(i + 1) % 6]);
@@ -466,7 +466,7 @@ public class BotGeometry {
          * returns the closest coord in the area to the given coord
          */
         public Coords getClosestCoordsTo(Coords c) {
-            final String METHOD_NAME = "getClosestCoordsTo(Coords)";
+            final String METHOD_NAME = "getClosestCoordsTo(Coords)"; //$NON-NLS-1$
             owner.methodBegin(getClass(), METHOD_NAME);
 
             try {
@@ -514,10 +514,10 @@ public class BotGeometry {
 
         void setEdges(HexLine[] edges) {
             if (edges == null) {
-                throw new IllegalArgumentException("Edges cannot be NULL, but it's members can.");
+                throw new IllegalArgumentException(Messages.getString("BotGeometry.EdgesCanNotBeNull")); //$NON-NLS-1$
             }
             if (edges.length != 6) {
-                throw new IllegalArgumentException("Edges must have exactly 6 members.");
+                throw new IllegalArgumentException(Messages.getString("BotGeometry.EdgesMustHaveSixMembers")); //$NON-NLS-1$
             }
 
             EDGES_LOCK.writeLock().lock();
@@ -544,11 +544,11 @@ public class BotGeometry {
      * runs a series of self tests to make sure geometry is done correctly
      */
     static void debugSelfTest(Princess owner) {
-        final String METHOD_NAME = "debugSelfTest()";
-        final String PASSED = "passed";
-        final String FAILED = "failed";
+        final String METHOD_NAME = "debugSelfTest()"; //$NON-NLS-1$
+        final String PASSED = "passed"; //$NON-NLS-1$
+        final String FAILED = "failed"; //$NON-NLS-1$
 
-        StringBuilder msg = new StringBuilder("Performing self test of geometry");
+        StringBuilder msg = new StringBuilder(Messages.getString("BotGeometry.GeometrySelfTest")); //$NON-NLS-1$
 
         try {
             Coords center = new Coords(4, 6);
@@ -557,7 +557,7 @@ public class BotGeometry {
                 lines[i] = new HexLine(center, i, owner);
             }
 
-            msg.append("\n\tTesting that center lies in lines... ");
+            msg.append(Messages.getString("BotGeometry.TestingCenter")); //$NON-NLS-1$
             boolean passed = true;
             for (int i = 0; i < 6; i++) {
                 //System.err.println("direction="+i);
@@ -568,7 +568,7 @@ public class BotGeometry {
             }
             msg.append(passed ? PASSED : FAILED);
 
-            msg.append("\n\tTesting more points that should lie on lines... ");
+            msg.append(Messages.getString("BotGeometry.TestingPoints")); //$NON-NLS-1$
             passed = true;
             for (int i = 0; i < 6; i++) {
                 if ((lines[i].judgePoint(center.translated(i)) != 0) || (lines[i].judgePoint(center.translated((i +
@@ -584,7 +584,7 @@ public class BotGeometry {
             msg.append(passed ? PASSED : FAILED);
 
             passed = true;
-            msg.append("\n\tTesting points to left and right of lines... ");
+            msg.append(Messages.getString("BotGeometry.TestingPointsLeftAndRight")); //$NON-NLS-1$
             for (int i = 0; i < 6; i++) {
                 //            System.err.println("direction="+i);
                 //          System.err.println("-1="+lines[i].judgePoint(center.translated((i+5)%6)));
@@ -614,8 +614,8 @@ public class BotGeometry {
             area.expandToInclude(areapt1);
             area.expandToInclude(areapt2);
             area.expandToInclude(areapt3);
-            owner.log(BotGeometry.class, METHOD_NAME, "Checking area contains proper points... ");
-            msg.append("\n\tChecking area contains proper points... ");
+            owner.log(BotGeometry.class, METHOD_NAME, "Checking area contains proper points... "); //$NON-NLS-1$
+            msg.append(Messages.getString("BotGeometry.CheckingAreaContainsProperPoints")); //$NON-NLS-1$
             if (!area.contains(new Coords(1, 1))) {
                 passed = false;
             }
@@ -640,7 +640,7 @@ public class BotGeometry {
             msg.append(passed ? PASSED : FAILED);
 
             passed = true;
-            msg.append("\n\tChecking area doesn't contain extra points... ");
+            msg.append(Messages.getString("BotGeometry.CheckingNoExtraPoints")); //$NON-NLS-1$
             if (area.contains(new Coords(0, 1))) {
                 passed = false;
             }
