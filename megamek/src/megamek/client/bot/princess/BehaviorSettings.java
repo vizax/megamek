@@ -180,7 +180,7 @@ public class BehaviorSettings {
      */
     public void setDescription(String description) throws PrincessException {
         if (StringUtil.isNullOrEmpty(description)) {
-            throw new PrincessException("Description is required!");
+            throw new PrincessException("Description is required!"); //$NON-NLS-1$
         }
         this.description = description.trim();
     }
@@ -288,7 +288,7 @@ public class BehaviorSettings {
      * @param forcedWithdrawal Should Princess follow the Forced Withdrawal rules?
      */
     public void setForcedWithdrawal(String forcedWithdrawal) {
-        setForcedWithdrawal("true".equalsIgnoreCase(forcedWithdrawal));
+        setForcedWithdrawal("true".equalsIgnoreCase(forcedWithdrawal)); //$NON-NLS-1$
     }
 
     private int validateIndex(int index) {
@@ -480,7 +480,7 @@ public class BehaviorSettings {
         try {
             setHomeEdge(Integer.parseInt(homeEdge.trim()));
         } catch (NumberFormatException e) {
-            throw new PrincessException("Invalid homeEdge value.", e);
+            throw new PrincessException("Invalid homeEdge value.", e); //$NON-NLS-1$
         }
     }
 
@@ -599,34 +599,34 @@ public class BehaviorSettings {
         NodeList children = behavior.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
-            if ("name".equalsIgnoreCase(child.getNodeName())) {
+            if ("name".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setDescription(child.getTextContent());
-            } else if ("forcedWithdrawal".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("forcedWithdrawal".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setForcedWithdrawal(child.getTextContent());
-            } else if ("goHome".equalsIgnoreCase(child.getNodeName())) {
-                setGoHome("true".equalsIgnoreCase(child.getTextContent()));
-            } else if ("autoFlee".equalsIgnoreCase(child.getNodeName())) {
-                setAutoFlee("true".equalsIgnoreCase(child.getTextContent()));
-            } else if ("fallShameIndex".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("goHome".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
+                setGoHome("true".equalsIgnoreCase(child.getTextContent())); //$NON-NLS-1$
+            } else if ("autoFlee".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
+                setAutoFlee("true".equalsIgnoreCase(child.getTextContent())); //$NON-NLS-1$
+            } else if ("fallShameIndex".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setFallShameIndex(child.getTextContent());
-            } else if ("hyperAggressionIndex".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("hyperAggressionIndex".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setHyperAggressionIndex(child.getTextContent());
-            } else if ("selfPreservationIndex".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("selfPreservationIndex".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setSelfPreservationIndex(child.getTextContent());
-            } else if ("homeEdge".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("homeEdge".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setHomeEdge(child.getTextContent());
-            } else if ("herdMentalityIndex".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("herdMentalityIndex".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setHerdMentalityIndex(child.getTextContent());
-            } else if ("braveryIndex".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("braveryIndex".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 setBraveryIndex(child.getTextContent());
-            } else if ("strategicTargets".equalsIgnoreCase(child.getNodeName())) {
+            } else if ("strategicTargets".equalsIgnoreCase(child.getNodeName())) { //$NON-NLS-1$
                 NodeList targets = child.getChildNodes();
                 for (int j = 0; j < targets.getLength(); j++) {
                     Node t = targets.item(j);
-                    if ("target".equalsIgnoreCase(t.getNodeName())) {
+                    if ("target".equalsIgnoreCase(t.getNodeName())) { //$NON-NLS-1$
                         addStrategicTarget(t.getTextContent());
                     }
-                    if ("unit".equalsIgnoreCase(t.getNodeName())) {
+                    if ("unit".equalsIgnoreCase(t.getNodeName())) { //$NON-NLS-1$
                         addPriorityUnit(t.getTextContent());
                     }
                 }
@@ -649,57 +649,57 @@ public class BehaviorSettings {
      */
     public Element toXml(Document doc, boolean includeTargets) {
         try {
-            Element behavior = doc.createElement("behavior");
+            Element behavior = doc.createElement("behavior"); //$NON-NLS-1$
 
-            Element nameNode = doc.createElement("name");
+            Element nameNode = doc.createElement("name"); //$NON-NLS-1$
             nameNode.setTextContent(StringUtil.makeXmlSafe(getDescription()));
             behavior.appendChild(nameNode);
 
-            Element homeEdgeNode = doc.createElement("homeEdge");
-            homeEdgeNode.setTextContent("" + getHomeEdge().getIndex());
+            Element homeEdgeNode = doc.createElement("homeEdge"); //$NON-NLS-1$
+            homeEdgeNode.setTextContent("" + getHomeEdge().getIndex()); //$NON-NLS-1$
             behavior.appendChild(homeEdgeNode);
 
-            Element forcedWithdrawalNode = doc.createElement("forcedWithdrawal");
-            forcedWithdrawalNode.setTextContent("" + isForcedWithdrawal());
+            Element forcedWithdrawalNode = doc.createElement("forcedWithdrawal"); //$NON-NLS-1$
+            forcedWithdrawalNode.setTextContent("" + isForcedWithdrawal()); //$NON-NLS-1$
             behavior.appendChild(forcedWithdrawalNode);
 
-            Element goHomeNode = doc.createElement("goHome");
-            goHomeNode.setTextContent("" + shouldGoHome());
+            Element goHomeNode = doc.createElement("goHome"); //$NON-NLS-1$
+            goHomeNode.setTextContent("" + shouldGoHome()); //$NON-NLS-1$
             behavior.appendChild(goHomeNode);
 
-            Element autoFleeNode = doc.createElement("autoFlee");
-            autoFleeNode.setTextContent("" + shouldAutoFlee());
+            Element autoFleeNode = doc.createElement("autoFlee"); //$NON-NLS-1$
+            autoFleeNode.setTextContent("" + shouldAutoFlee()); //$NON-NLS-1$
             behavior.appendChild(autoFleeNode);
 
-            Element fallShameNode = doc.createElement("fallShameIndex");
-            fallShameNode.setTextContent("" + getFallShameIndex());
+            Element fallShameNode = doc.createElement("fallShameIndex"); //$NON-NLS-1$
+            fallShameNode.setTextContent("" + getFallShameIndex()); //$NON-NLS-1$
             behavior.appendChild(fallShameNode);
 
-            Element hyperAggressionNode = doc.createElement("hyperAggressionIndex");
-            hyperAggressionNode.setTextContent("" + getHyperAggressionIndex());
+            Element hyperAggressionNode = doc.createElement("hyperAggressionIndex"); //$NON-NLS-1$
+            hyperAggressionNode.setTextContent("" + getHyperAggressionIndex()); //$NON-NLS-1$
             behavior.appendChild(hyperAggressionNode);
 
-            Element selfPreservationNode = doc.createElement("selfPreservationIndex");
-            selfPreservationNode.setTextContent("" + getSelfPreservationIndex());
+            Element selfPreservationNode = doc.createElement("selfPreservationIndex"); //$NON-NLS-1$
+            selfPreservationNode.setTextContent("" + getSelfPreservationIndex()); //$NON-NLS-1$
             behavior.appendChild(selfPreservationNode);
 
-            Element herdMentalityNode = doc.createElement("herdMentalityIndex");
-            herdMentalityNode.setTextContent("" + getHerdMentalityIndex());
+            Element herdMentalityNode = doc.createElement("herdMentalityIndex"); //$NON-NLS-1$
+            herdMentalityNode.setTextContent("" + getHerdMentalityIndex()); //$NON-NLS-1$
             behavior.appendChild(herdMentalityNode);
 
-            Element braveryNode = doc.createElement("braveryIndex");
-            braveryNode.setTextContent("" + getBraveryIndex());
+            Element braveryNode = doc.createElement("braveryIndex"); //$NON-NLS-1$
+            braveryNode.setTextContent("" + getBraveryIndex()); //$NON-NLS-1$
             behavior.appendChild(braveryNode);
 
-            Element targetsNode = doc.createElement("strategicBuildingTargets");
+            Element targetsNode = doc.createElement("strategicBuildingTargets"); //$NON-NLS-1$
             if (includeTargets) {
                 for (String t : getStrategicBuildingTargets()) {
-                    Element targetElement = doc.createElement("target");
+                    Element targetElement = doc.createElement("target"); //$NON-NLS-1$
                     targetElement.setTextContent(StringUtil.makeXmlSafe(t));
                     targetsNode.appendChild(targetElement);
                 }
                 for (int id : getPriorityUnitTargets()) {
-                    Element unitElement = doc.createElement("unit");
+                    Element unitElement = doc.createElement("unit"); //$NON-NLS-1$
                     unitElement.setTextContent(String.valueOf(id));
                     targetsNode.appendChild(unitElement);
                 }
@@ -718,22 +718,22 @@ public class BehaviorSettings {
      * @return A string log of these behavior settings.
      */
     public String toLog() {
-        String out = "Princess Behavior: " + getDescription();
-        out += "\n\tHome Edge: " + getHomeEdge().toString();
-        out += "\n\tForced Withdrawal: " + isForcedWithdrawal();
-        out += "\n\tSelf Preservation: " + getSelfPreservationIndex();
-        out += "\n\tHyper Aggression: " + getHyperAggressionIndex();
-        out += "\n\tFall Shame: " + getFallShameIndex();
-        out += "\n\tBravery: " + getBraveryIndex();
-        out += "\n\tHerd Mentality: " + getHerdMentalityIndex();
-        out += "\n\tTargets:";
-        out += "\n\t\tCoords: ";
+        String out = Messages.getString("BehaviorSettings.BotBehavior") + getDescription(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotHomeEdge") + getHomeEdge().toString(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotForcedWithdrawal") + isForcedWithdrawal(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotSelfPreservation") + getSelfPreservationIndex(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotHyperAgression") + getHyperAggressionIndex(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotFallShame") + getFallShameIndex(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotBravery") + getBraveryIndex(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotHerMentality") + getHerdMentalityIndex(); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotTargets"); //$NON-NLS-1$
+        out += Messages.getString("BehaviorSettings.BotCoords"); //$NON-NLS-1$
         for (String t : getStrategicBuildingTargets()) {
-            out += "  " + t;
+            out += "  " + t; //$NON-NLS-1$
         }
-        out += "\n\t\tUnits:";
+        out += Messages.getString("BehaviorSettings.BotUnits"); //$NON-NLS-1$
         for (int id : getPriorityUnitTargets()) {
-            out += "  " + id;
+            out += "  " + id; //$NON-NLS-1$
         }
         return out;
     }

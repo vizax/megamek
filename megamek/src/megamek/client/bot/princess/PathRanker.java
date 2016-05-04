@@ -68,7 +68,7 @@ public abstract class PathRanker {
     public ArrayList<RankedPath> rankPaths(List<MovePath> movePaths, IGame game, int maxRange,
                                            double fallTollerance, int startingHomeDistance,
                                            List<Entity> enemies, List<Entity> friends) {
-        final String METHOD_NAME = "rankPaths(ArrayList<MovePath>, IGame)";
+        final String METHOD_NAME = "rankPaths(ArrayList<MovePath>, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -79,8 +79,8 @@ public abstract class PathRanker {
 
             // Let's try to whittle down this list.
             List<MovePath> validPaths = validatePaths(movePaths, game, maxRange, fallTollerance, startingHomeDistance);
-            getOwner().log(getClass(), METHOD_NAME, LogLevel.DEBUG, "Validated " + validPaths.size() + " out of " +
-                                                               movePaths.size() + " possible paths.");
+            getOwner().log(getClass(), METHOD_NAME, LogLevel.DEBUG, Messages.getString("PathRanker.BotValidated") + validPaths.size() + Messages.getString("PathRanker.BotOutOf") + //$NON-NLS-1$ //$NON-NLS-2$
+                                                               movePaths.size() + Messages.getString("PathRanker.BotPossiblePaths")); //$NON-NLS-1$
 
             Coords allyCenter = calcAllyCenter(movePaths.get(0).getEntity().getId(), friends, game);
 
@@ -96,7 +96,7 @@ public abstract class PathRanker {
                                           .round(new MathContext(0, RoundingMode.DOWN));
                 if ((percent.compareTo(interval) >= 0)
                     && (LogLevel.INFO.getLevel() <= getOwner().getVerbosity().getLevel())) {
-                    getOwner().sendChat("... " + percent.intValue() + "% complete.");
+                    getOwner().sendChat(Messages.getString("PathRanker.BotElipse") + percent.intValue() + Messages.getString("PathRanker.BotPercentComplete")); //$NON-NLS-1$ //$NON-NLS-2$
                     interval = percent.add(new BigDecimal(5));
                 }
             }
@@ -108,7 +108,7 @@ public abstract class PathRanker {
 
     private List<MovePath> validatePaths(List<MovePath> startingPathList, IGame game, int maxRange,
                                          double fallTolerance, int startingHomeDistance) {
-        final String METHOD_NAME = "validatePaths(List<MovePath>, IGame, Targetable, int, double, int, int)";
+        final String METHOD_NAME = "validatePaths(List<MovePath>, IGame, Targetable, int, double, int, int)"; //$NON-NLS-1$
         LogLevel logLevel = LogLevel.DEBUG;
 
         if (startingPathList.isEmpty()) {
@@ -140,7 +140,7 @@ public abstract class PathRanker {
         }
 
         for (MovePath path : startingPathList) {
-            StringBuilder msg = new StringBuilder("Validating Path: ").append(path.toString());
+            StringBuilder msg = new StringBuilder("Validating Path: ").append(path.toString()); //$NON-NLS-1$
 
             try {
                 Coords finalCoords = path.getFinalCoords();
@@ -148,7 +148,7 @@ public abstract class PathRanker {
                 // If fleeing, skip any paths that don't get me closer to home.
                 if (fleeing && (distanceToHomeEdge(finalCoords, homeEdge, game) >= startingHomeDistance)) {
                     logLevel = LogLevel.INFO;
-                    msg.append("\n\tINVALID: Running away in wrong direction.");
+                    msg.append(Messages.getString("PathRanker.BotRunningWrongDirection")); //$NON-NLS-1$
                     continue;
                 }
 
@@ -156,14 +156,14 @@ public abstract class PathRanker {
                 Targetable closestToEnd = findClosestEnemy(mover, finalCoords, game);
                 String validation = validRange(finalCoords, closestToEnd, startingTargetDistance, maxRange, inRange);
                 if (!StringUtil.isNullOrEmpty(validation)) {
-                    msg.append("\n\t").append(validation);
+                    msg.append(Messages.getString("PathRanker.9")).append(validation); //$NON-NLS-1$
                     continue;
                 }
 
                 // Don't move on/through buildings that will not support our weight.
                 if (willBuildingCollapse(path, game)) {
                     logLevel = LogLevel.INFO;
-                    msg.append("\n\tINVALID: Building in path will collapse.");
+                    msg.append(Messages.getString("PathRanker.BotBuildingWillCollapse")); //$NON-NLS-1$
                     continue;
                 }
 
@@ -171,12 +171,12 @@ public abstract class PathRanker {
                 double chance = getMovePathSuccessProbability(path, msg);
                 if (chance < fallTolerance) {
                     logLevel = LogLevel.INFO;
-                    msg.append("\n\tINVALID: Too likely to fall on my face.");
+                    msg.append(Messages.getString("PathRanker.BotLikelyFacePlant")); //$NON-NLS-1$
                     continue;
                 }
 
                 // If all the above checks have passed, this is a valid path.
-                msg.append("\n\tVALID.");
+                msg.append(Messages.getString("PathRanker.BotValid")); //$NON-NLS-1$
                 returnPaths.add(path);
 
             } finally {
@@ -193,7 +193,7 @@ public abstract class PathRanker {
     }
 
     public RankedPath getBestPath(List<RankedPath> ps) {
-        final String METHOD_NAME = "getBestPath(ArrayList<Rankedpath>)";
+        final String METHOD_NAME = "getBestPath(ArrayList<Rankedpath>)"; //$NON-NLS-1$
         getOwner().methodBegin(PathRanker.class, METHOD_NAME);
 
         try {
@@ -219,7 +219,7 @@ public abstract class PathRanker {
      * Find the closest enemy to a unit with a path
      */
     Entity findClosestEnemy(Entity me, Coords position, IGame game) {
-        final String METHOD_NAME = "findClosestEnemy(Entity, Coords, IGame)";
+        final String METHOD_NAME = "findClosestEnemy(Entity, Coords, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(PathRanker.class, METHOD_NAME);
 
         try {
@@ -256,39 +256,39 @@ public abstract class PathRanker {
         MovePath pathCopy = movePath.clone();
         List<TargetRoll> pilotingRolls = getPSRList(pathCopy);
         double successProbability = 1.0;
-        msg.append("\n\tCalculating Move Path Success");
+        msg.append(Messages.getString("PathRanker.BotCalcMovePathSuccess")); //$NON-NLS-1$
         for (TargetRoll roll : pilotingRolls) {
 
             // Skip the getting up check.  That's handled when checking for being immobile.
-            if (roll.getDesc().toLowerCase().contains("getting up")) {
+            if (roll.getDesc().toLowerCase().contains("getting up")) { //$NON-NLS-1$
                 continue;
             }
-            if (roll.getDesc().toLowerCase().contains("careful stand")) {
+            if (roll.getDesc().toLowerCase().contains("careful stand")) { //$NON-NLS-1$
                 continue;
             }
             boolean naturalAptPilot = movePath.getEntity().getCrew().getOptions()
                                               .booleanOption(OptionsConstants.PILOT_APTITUDE_GUNNERY);
             if (naturalAptPilot) {
-                msg.append("\n\t\tPilot has Natural Aptitude Piloting");
+                msg.append(Messages.getString("PathRanker.BotPilotHasNatAptPiloting")); //$NON-NLS-1$
             }
 
-            msg.append("\n\t\tRoll ").append(roll.getDesc()).append(" ").append(roll.getValue());
+            msg.append(Messages.getString("PathRanker.BotRoll")).append(roll.getDesc()).append(" ").append(roll.getValue()); //$NON-NLS-1$ //$NON-NLS-2$
             double odds = Compute.oddsAbove(roll.getValue(), naturalAptPilot) / 100;
-            msg.append(" (").append(NumberFormat.getPercentInstance().format(odds)).append(")");
+            msg.append(" (").append(NumberFormat.getPercentInstance().format(odds)).append(")"); //$NON-NLS-1$ //$NON-NLS-2$
             successProbability *= odds;
         }
 
         // Account for MASC
         if (pathCopy.hasActiveMASC()) {
-            msg.append("\n\t\tMASC ");
+            msg.append(Messages.getString("PathRanker.BotMasc")); //$NON-NLS-1$
             int target = pathCopy.getEntity().getMASCTarget();
             msg.append(target);
             // todo Does Natural Aptitude Piloting apply to this?  I assume not.
             double odds = Compute.oddsAbove(target) / 100;
-            msg.append(" (").append(NumberFormat.getPercentInstance().format(odds)).append(")");
+            msg.append(" (").append(NumberFormat.getPercentInstance().format(odds)).append(")"); //$NON-NLS-1$ //$NON-NLS-2$
             successProbability *= odds;
         }
-        msg.append("\n\t\tTotal = ").append(NumberFormat.getPercentInstance().format(successProbability));
+        msg.append(Messages.getString("PathRanker.BotTotal")).append(NumberFormat.getPercentInstance().format(successProbability)); //$NON-NLS-1$
 
         return successProbability;
     }
@@ -298,35 +298,35 @@ public abstract class PathRanker {
     }
 
     public int distanceToHomeEdge(Coords position, HomeEdge homeEdge, IGame game) {
-        final String METHOD_NAME = "distanceToHomeEdge(Coords, HomeEdge, IGame)";
+        final String METHOD_NAME = "distanceToHomeEdge(Coords, HomeEdge, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
             Coords edgeCoords;
             int boardHeight = game.getBoard().getHeight();
             int boardWidth = game.getBoard().getWidth();
-            StringBuilder msg = new StringBuilder("Getting distance to home edge: ");
+            StringBuilder msg = new StringBuilder(Messages.getString("PathRanker.BotGettingHomeEdge")); //$NON-NLS-1$
             if (HomeEdge.NORTH.equals(homeEdge)) {
-                msg.append("North");
+                msg.append(Messages.getString("PathRanker.BotNorth")); //$NON-NLS-1$
                 edgeCoords = new Coords(position.getX(), 0);
             } else if (HomeEdge.SOUTH.equals(homeEdge)) {
-                msg.append("South");
+                msg.append(Messages.getString("PathRanker.BotSouth")); //$NON-NLS-1$
                 edgeCoords = new Coords(position.getX(), boardHeight);
             } else if (HomeEdge.WEST.equals(homeEdge)) {
-                msg.append("West");
+                msg.append(Messages.getString("PathRanker.BotWest")); //$NON-NLS-1$
                 edgeCoords = new Coords(0, position.getY());
             } else if (HomeEdge.EAST.equals(homeEdge)) {
-                msg.append("East");
+                msg.append(Messages.getString("PathRanker.BotEast")); //$NON-NLS-1$
                 edgeCoords = new Coords(boardWidth, position.getY());
             } else {
-                msg.append("Default");
-                getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, "Invalid home edge.  Defaulting to NORTH.");
+                msg.append(Messages.getString("PathRanker.BotDefault")); //$NON-NLS-1$
+                getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, Messages.getString("PathRanker.BotInvalidHomeEdgeDefaultNorth")); //$NON-NLS-1$
                 edgeCoords = new Coords(boardWidth / 2, 0);
             }
             msg.append(edgeCoords.toFriendlyString());
 
             int distance = edgeCoords.distance(position);
-            msg.append(" dist = ").append(NumberFormat.getInstance().format(distance));
+            msg.append(Messages.getString("PathRanker.BotDistanceEquals")).append(NumberFormat.getInstance().format(distance)); //$NON-NLS-1$
 
             getOwner().log(getClass(), METHOD_NAME, LogLevel.DEBUG, msg.toString());
             return distance;
@@ -345,12 +345,12 @@ public abstract class PathRanker {
         int finalDistanceToTarget = finalCoords.distance(target.getPosition());
         if (!inRange) {
             if (finalDistanceToTarget > startingTargetDistance) {
-                return "INVALID: Not in range and moving further away.";
+                return Messages.getString("PathRanker.BotNotInRangeMovingAway"); //$NON-NLS-1$
             }
 
         } else { // If I am in range, discard any path that takes me out of range.
             if (finalDistanceToTarget > maxRange) {
-                return "INVALID: In range and moving out of range.";
+                return Messages.getString("PathRanker.BotInRangeMovingOut"); //$NON-NLS-1$
             }
         }
 
@@ -437,8 +437,8 @@ public abstract class PathRanker {
         Coords center = new Coords(xCenter, yCenter);
 
         if (!game.getBoard().contains(center)) {
-            getOwner().log(getClass(), "calcAllyCenter(int, List<Entity>, IGame)", LogLevel.ERROR, "Center of ally group " +
-                                                                                              center.toFriendlyString() + " not within board boundaries.");
+            getOwner().log(getClass(), "calcAllyCenter(int, List<Entity>, IGame)", LogLevel.ERROR, Messages.getString("PathRanker.BotCenterOfAllyGroup") + //$NON-NLS-1$ //$NON-NLS-2$
+                                                                                              center.toFriendlyString() + Messages.getString("PathRanker.BotNotWithinBoard")); //$NON-NLS-1$
             return null;
         }
 

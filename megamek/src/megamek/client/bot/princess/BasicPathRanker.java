@@ -62,7 +62,7 @@ import megamek.common.options.OptionsConstants;
  */
 public class BasicPathRanker extends PathRanker {
 
-    protected final DecimalFormat LOG_DECIMAL = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance());
+    protected final DecimalFormat LOG_DECIMAL = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance()); //$NON-NLS-1$
     protected final NumberFormat LOG_INT = NumberFormat.getIntegerInstance();
     protected final NumberFormat LOG_PERCENT = NumberFormat.getPercentInstance();
 
@@ -74,14 +74,14 @@ public class BasicPathRanker extends PathRanker {
 
     public BasicPathRanker(Princess owningPrincess) {
         super(owningPrincess);
-        final String METHOD_NAME = "BasicPathRanker(Princess)";
+        final String METHOD_NAME = "BasicPathRanker(Princess)"; //$NON-NLS-1$
         bestDamageByEnemies = new TreeMap<>();
         getOwner().log(
                 getClass(),
                 METHOD_NAME,
                 LogLevel.DEBUG,
-                "Using " + getOwner().getBehaviorSettings().getDescription()
-                        + " behavior");
+                Messages.getString("BasicPathRanker.BotUsing") + getOwner().getBehaviorSettings().getDescription() //$NON-NLS-1$
+                        + Messages.getString("BasicPathRanker.BotBehavior")); //$NON-NLS-1$
     }
 
     public FireControl getFireControl() {
@@ -118,10 +118,10 @@ public class BasicPathRanker extends PathRanker {
     }
 
     protected boolean canFlankAndKick(Entity enemy, Coords behind, Coords leftFlank, Coords rightFlank, int myFacing) {
-        final String METHOD_NAME = "canFlankAndKick(Entity, Coords, Coords, Coords, int)";
+        final String METHOD_NAME = "canFlankAndKick(Entity, Coords, Coords, Coords, int)"; //$NON-NLS-1$
         Set<CoordFacingCombo> enemyFacingSet = pathEnumerator.getUnitPotentialLocations().get(enemy.getId());
         if (enemyFacingSet == null) {
-            getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, "no facing set for " + enemy.getDisplayName());
+            getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, Messages.getString("BasicPathRanker.BotNoFacingSet") + enemy.getDisplayName()); //$NON-NLS-1$
             return false;
         }
         return enemyFacingSet.contains(CoordFacingCombo.createCoordFacingCombo(behind, myFacing))
@@ -140,7 +140,7 @@ public class BasicPathRanker extends PathRanker {
      * TODO estimated damage is sloppy.  Improve for missile attacks, gun skill, and range
      */
     public EntityEvaluationResponse evaluateUnmovedEnemy(Entity enemy, MovePath path, boolean useExtremeRange, boolean useLOSRange) {
-        final String METHOD_NAME = "EntityEvaluationResponse evaluateUnmovedEnemy(Entity,MovePath,IGame)";
+        final String METHOD_NAME = "EntityEvaluationResponse evaluateUnmovedEnemy(Entity,MovePath,IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -201,26 +201,26 @@ public class BasicPathRanker extends PathRanker {
             boolean isSpheroid) {
         // stalling is bad.
         if (movePath.getFinalVelocity() == 0 && !vtol && !isSpheroid) {
-            return new RankedPath(-1000d, movePath, "stall");
+            return new RankedPath(-1000d, movePath, "stall"); //$NON-NLS-1$
         }
         // Spheroids only stall if they don't move
         if (isSpheroid && (movePath.getFinalNDown() == 0)
                 && (movePath.getMpUsed() == 0)
                 && !movePath.contains(MoveStepType.VLAND)) {
-            return new RankedPath(-1000d, movePath, "stall");
+            return new RankedPath(-1000d, movePath, "stall"); //$NON-NLS-1$
         }
 
         // So is crashing.
         if (movePath.getFinalAltitude() < 1) {
-            return new RankedPath(-10000d, movePath, "crash");
+            return new RankedPath(-10000d, movePath, "crash"); //$NON-NLS-1$
         }
 
         // Flying off board should only be done if necessary, but is better than taking a lot of damage.
         if ((movePath.getLastStep() != null) && (movePath.getLastStep().getType() == MoveStepType.RETURN)) {
             if (vtol) {
-                return new RankedPath(-5000d, movePath, "off-board");
+                return new RankedPath(-5000d, movePath, "off-board"); //$NON-NLS-1$
             }
-            return new RankedPath(-5d, movePath, "off-board");
+            return new RankedPath(-5d, movePath, "off-board"); //$NON-NLS-1$
         }
 
         return null;
@@ -240,9 +240,9 @@ public class BasicPathRanker extends PathRanker {
         double pilotingFailure = (1 - successProbability);
         double fallShame = getOwner().getBehaviorSettings().getFallShameValue();
         double fallMod = pilotingFailure * (pilotingFailure == 1 ? -1000 : fallShame);
-        formula.append("fall mod [").append(LOG_DECIMAL.format(fallMod)).append(" = ")
-               .append(LOG_DECIMAL.format(pilotingFailure)).append(" * ").append(LOG_DECIMAL.format(fallShame))
-               .append("]");
+        formula.append(Messages.getString("BasicPathRanker.BotFallMod")).append(LOG_DECIMAL.format(fallMod)).append(" = ") //$NON-NLS-1$ //$NON-NLS-2$
+               .append(LOG_DECIMAL.format(pilotingFailure)).append(" * ").append(LOG_DECIMAL.format(fallShame)) //$NON-NLS-1$
+               .append("]"); //$NON-NLS-1$
         return fallMod;
     }
 
@@ -373,25 +373,25 @@ public class BasicPathRanker extends PathRanker {
         }
         double aggression = getOwner().getBehaviorSettings().getHyperAggressionValue();
         double aggressionMod = distToEnemy * aggression;
-        formula.append(" - aggressionMod [").append(LOG_DECIMAL.format(aggressionMod)).append(" = ")
-               .append(LOG_DECIMAL.format(distToEnemy)).append(" * ").append(LOG_DECIMAL.format(aggression))
-               .append("]");
+        formula.append(Messages.getString("BasicPathRanker.BotAggressionMod")).append(LOG_DECIMAL.format(aggressionMod)).append(" = ") //$NON-NLS-1$ //$NON-NLS-2$
+               .append(LOG_DECIMAL.format(distToEnemy)).append(" * ").append(LOG_DECIMAL.format(aggression)) //$NON-NLS-1$
+               .append("]"); //$NON-NLS-1$
         return aggressionMod;
     }
 
     // The further I am from my teammates, the lower this path ranks (weighted by Herd Mentality).
     private double calculateHerdingMod(Coords friendsCoords, MovePath path, StringBuilder formula) {
         if (friendsCoords == null) {
-            formula.append(" - herdingMod [0 no friends]");
+            formula.append(Messages.getString("BasicPathRanker.BotHerdingModNoFriends")); //$NON-NLS-1$
             return 0;
         }
 
         double distanceToAllies = friendsCoords.distance(path.getFinalCoords());
         double herding = getOwner().getBehaviorSettings().getHerdMentalityValue();
         double herdingMod = distanceToAllies * herding;
-        formula.append(" - herdingMod [").append(LOG_DECIMAL.format(herdingMod)).append(" = ")
-               .append(LOG_DECIMAL.format(distanceToAllies)).append(" * ").append(LOG_DECIMAL.format(herding))
-               .append("]");
+        formula.append(Messages.getString("BasicPathRanker.BotHerdingMod")).append(LOG_DECIMAL.format(herdingMod)).append(" = ") //$NON-NLS-1$ //$NON-NLS-2$
+               .append(LOG_DECIMAL.format(distanceToAllies)).append(" * ").append(LOG_DECIMAL.format(herding)) //$NON-NLS-1$
+               .append("]"); //$NON-NLS-1$
         return herdingMod;
     }
 
@@ -417,9 +417,9 @@ public class BasicPathRanker extends PathRanker {
             facingDiff = 3;
         }
         double facingMod = Math.max(0.0, 50 * (facingDiff - 1));
-        formula.append(" - facingMod [").append(LOG_DECIMAL.format(facingMod)).append(" = max(")
-               .append(LOG_INT.format(0)).append(", ").append(LOG_INT.format(50)).append(" * {")
-               .append(LOG_INT.format(facingDiff)).append(" - ").append(LOG_INT.format(1)).append("})]");
+        formula.append(Messages.getString("BasicPathRanker.BotFacinfMod")).append(LOG_DECIMAL.format(facingMod)).append(Messages.getString("BasicPathRanker.BotEqualsMax")) //$NON-NLS-1$ //$NON-NLS-2$
+               .append(LOG_INT.format(0)).append(", ").append(LOG_INT.format(50)).append(" * {") //$NON-NLS-1$ //$NON-NLS-2$
+               .append(LOG_INT.format(facingDiff)).append(" - ").append(LOG_INT.format(1)).append("})]"); //$NON-NLS-1$ //$NON-NLS-2$
         return facingMod;
     }
 
@@ -429,9 +429,9 @@ public class BasicPathRanker extends PathRanker {
             int newDistanceToHome = distanceToHomeEdge(path.getFinalCoords(), getOwner().getHomeEdge(), game);
             double selfPreservation = getOwner().getBehaviorSettings().getSelfPreservationValue();
             double selfPreservationMod = newDistanceToHome * selfPreservation;
-            formula.append(" - selfPreservationMod [").append(LOG_DECIMAL.format(selfPreservationMod))
-                   .append(" = ").append(LOG_DECIMAL.format(newDistanceToHome)).append(" * ")
-                   .append(LOG_DECIMAL.format(selfPreservation)).append("]");
+            formula.append(Messages.getString("BasicPathRanker.BotSelfPreservationMod")).append(LOG_DECIMAL.format(selfPreservationMod)) //$NON-NLS-1$
+                   .append(" = ").append(LOG_DECIMAL.format(newDistanceToHome)).append(" * ") //$NON-NLS-1$ //$NON-NLS-2$
+                   .append(LOG_DECIMAL.format(selfPreservation)).append("]"); //$NON-NLS-1$
             return selfPreservationMod;
         }
         return 0.0;
@@ -443,12 +443,12 @@ public class BasicPathRanker extends PathRanker {
     @Override
     public RankedPath rankPath(MovePath path, IGame game, int maxRange, double fallTolerance, int distanceHome,
                                List<Entity> enemies, Coords friendsCoords) {
-        final String METHOD_NAME = "rankPath(MovePath, IGame, Targetable, int, double, int, int, List<Entity>, Coords)";
+        final String METHOD_NAME = "rankPath(MovePath, IGame, Targetable, int, double, int, int, List<Entity>, Coords)"; //$NON-NLS-1$
 
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         Entity movingUnit = path.getEntity();
-        StringBuilder formula = new StringBuilder("Calculation: {");
+        StringBuilder formula = new StringBuilder(Messages.getString("BasicPathRanker.BotCalculation")); //$NON-NLS-1$
 
         try {
 
@@ -538,7 +538,7 @@ public class BasicPathRanker extends PathRanker {
 
             // If I cannot kick because I am a clan unit and "No physical attacks for the clans"
             // is enabled, set maximum physical damage for this path to zero.
-            if (game.getOptions().booleanOption("no_clan_physical") && path.getEntity().isClan()) {
+            if (game.getOptions().booleanOption("no_clan_physical") && path.getEntity().isClan()) { //$NON-NLS-1$
                 maximumPhysicalDamage = 0;
             }
 
@@ -550,11 +550,11 @@ public class BasicPathRanker extends PathRanker {
             // how much damage I can do (weighted by bravery), less the damage I might take.
             double braveryValue = getOwner().getBehaviorSettings().getBraveryValue();
             double braveryMod = successProbability * ((maximumDamageDone * braveryValue) - expectedDamageTaken);
-            formula.append(" + braveryMod [").append(LOG_DECIMAL.format(braveryMod)).append(" = ")
-                   .append(LOG_PERCENT.format(successProbability)).append(" * ((")
-                   .append(LOG_DECIMAL.format(maximumDamageDone)).append(" * ")
-                   .append(LOG_DECIMAL.format(braveryValue)).append(") - ")
-                   .append(LOG_DECIMAL.format(expectedDamageTaken)).append("]");
+            formula.append(Messages.getString("BasicPathRanker.BotBraverMod")).append(LOG_DECIMAL.format(braveryMod)).append(" = ") //$NON-NLS-1$ //$NON-NLS-2$
+                   .append(LOG_PERCENT.format(successProbability)).append(" * ((") //$NON-NLS-1$
+                   .append(LOG_DECIMAL.format(maximumDamageDone)).append(" * ") //$NON-NLS-1$
+                   .append(LOG_DECIMAL.format(braveryValue)).append(") - ") //$NON-NLS-1$
+                   .append(LOG_DECIMAL.format(expectedDamageTaken)).append("]"); //$NON-NLS-1$
             utility += braveryMod;
 
             //noinspection StatementWithEmptyBody
@@ -597,7 +597,7 @@ public class BasicPathRanker extends PathRanker {
      */
     @Override
     public void initUnitTurn(Entity unit, IGame game) {
-        final String METHOD_NAME = "initUnitTurn(Entity, IGame)";
+        final String METHOD_NAME = "initUnitTurn(Entity, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(getClass(), METHOD_NAME);
 
         try {
@@ -649,7 +649,7 @@ public class BasicPathRanker extends PathRanker {
      * @param game     IGame that we're playing
      */
     public double distanceToClosestEnemy(Entity me, Coords position, IGame game) {
-        final String METHOD_NAME = "distanceToClosestEnemy(Entity, Coords, IGame)";
+        final String METHOD_NAME = "distanceToClosestEnemy(Entity, Coords, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(BasicPathRanker.class, METHOD_NAME);
 
         try {
@@ -667,7 +667,7 @@ public class BasicPathRanker extends PathRanker {
      * Gives the distance to the closest edge
      */
     public int distanceToClosestEdge(Coords position, IGame game) {
-        final String METHOD_NAME = "distanceToClosestEdge(Coords, IGame)";
+        final String METHOD_NAME = "distanceToClosestEdge(Coords, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(BasicPathRanker.class, METHOD_NAME);
 
         try {
@@ -700,11 +700,11 @@ public class BasicPathRanker extends PathRanker {
      */
     @Override
     public int distanceToHomeEdge(Coords position, HomeEdge homeEdge, IGame game) {
-        final String METHOD_NAME = "distanceToHomeEdge(Coords, HomeEdge, IGame)";
+        final String METHOD_NAME = "distanceToHomeEdge(Coords, HomeEdge, IGame)"; //$NON-NLS-1$
         getOwner().methodBegin(BasicPathRanker.class, METHOD_NAME);
 
         try {
-            String msg = "Getting distance to home edge: " + homeEdge.toString();
+            String msg = Messages.getString("BasicPathRanker.BotGettingDistanceToHomeEdge") + homeEdge.toString(); //$NON-NLS-1$
 
             int width = game.getBoard().getWidth();
             int height = game.getBoard().getHeight();
@@ -728,12 +728,12 @@ public class BasicPathRanker extends PathRanker {
                     break;
                 }
                 default: {
-                    getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, "Invalid home edge.  Defaulting to NORTH.");
+                    getOwner().log(getClass(), METHOD_NAME, LogLevel.WARNING, Messages.getString("BasicPathRanker.BotInvalidHomeEdgeDefaultNorth")); //$NON-NLS-1$
                     distance = position.getY();
                 }
             }
 
-            msg += " -> " + distance;
+            msg += " -> " + distance; //$NON-NLS-1$
             getOwner().log(BasicPathRanker.class, METHOD_NAME, msg);
             return distance;
         } finally {
@@ -742,9 +742,9 @@ public class BasicPathRanker extends PathRanker {
     }
 
     protected double checkPathForHazards(MovePath path, Entity movingUnit, IGame game) {
-        final String METHOD_NAME = "checkPathForHazards(MovePath, Entity, IGame)";
+        final String METHOD_NAME = "checkPathForHazards(MovePath, Entity, IGame)"; //$NON-NLS-1$
 
-        StringBuilder logMsg = new StringBuilder("Checking Path (").append(path.toString()).append(") for hazards.");
+        StringBuilder logMsg = new StringBuilder(Messages.getString("BasicPathRanker.BotCheckingPath")).append(path.toString()).append(Messages.getString("BasicPathRanker.BotForHazards")); //$NON-NLS-1$ //$NON-NLS-2$
 
         try {
             // If we're flying or swimming, we don't care about ground hazards.
@@ -756,14 +756,14 @@ public class BasicPathRanker extends PathRanker {
                 EntityMovementType.MOVE_SUBMARINE_WALK.equals(path.getLastStepMovementType()) ||
                 EntityMovementType.MOVE_SUBMARINE_RUN.equals(path.getLastStepMovementType())) {
 
-                logMsg.append("\n\tMove Type (").append(path.getLastStepMovementType().toString())
-                      .append(") ignores ground hazards.");
+                logMsg.append(Messages.getString("BasicPathRanker.BotMoveType")).append(path.getLastStepMovementType().toString()) //$NON-NLS-1$
+                      .append(Messages.getString("BasicPathRanker.BotIgnoresGroundHazards")); //$NON-NLS-1$
                 return 0;
             }
 
             // If we're jumping, we only care about where we land.
             if (path.isJumping()) {
-                logMsg.append("\n\tJumping");
+                logMsg.append(Messages.getString("BasicPathRanker.BotJumping")); //$NON-NLS-1$
                 Coords endCoords = path.getFinalCoords();
                 IHex endHex = game.getBoard().getHex(endCoords);
                 return checkHexForHazards(endHex, movingUnit, true, path.getLastStep(), true, path, game.getBoard(),
@@ -792,7 +792,7 @@ public class BasicPathRanker extends PathRanker {
 
     private double checkHexForHazards(IHex hex, Entity movingUnit, boolean endHex, MoveStep step, boolean jumpLanding,
                                       MovePath movePath, IBoard board, StringBuilder logMsg) {
-        logMsg.append("\n\tHex ").append(hex.getCoords().toFriendlyString());
+        logMsg.append(Messages.getString("BasicPathRanker.BotHex")).append(hex.getCoords().toFriendlyString()); //$NON-NLS-1$
 
         final List<Integer> HAZARDS = new ArrayList<>(Arrays.asList(Terrains.FIRE, Terrains.MAGMA, Terrains.ICE,
                                                                     Terrains.WATER, Terrains.BUILDING));
@@ -807,7 +807,7 @@ public class BasicPathRanker extends PathRanker {
 
         // No hazards were found, so nothing to worry about.
         if (hazards.isEmpty()) {
-            logMsg.append(" has no hazards.");
+            logMsg.append(Messages.getString("BasicPathRanker.BotNoHazards")); //$NON-NLS-1$
             return 0;
         }
 
@@ -834,7 +834,7 @@ public class BasicPathRanker extends PathRanker {
                     break;
             }
         }
-        logMsg.append("\n\tTotal Hazard = ").append(LOG_DECIMAL.format(hazardValue));
+        logMsg.append(Messages.getString("BasicPathRanker.BotTotalHazard")).append(LOG_DECIMAL.format(hazardValue)); //$NON-NLS-1$
 
         return hazardValue;
     }
@@ -842,11 +842,11 @@ public class BasicPathRanker extends PathRanker {
     // Building collapse and basements are handled in PathRanker.validatePaths.
     private double calcBuildingHazard(MoveStep step, Entity movingUnit, MovePath movePath, IBoard board,
                                       StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating building hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingBuildingHazard")); //$NON-NLS-1$
 
         // Protos, BA and Infantry move through buildings freely.
         if (movingUnit instanceof Protomech || movingUnit instanceof Infantry) {
-            logMsg.append("Safe for infantry and protos.");
+            logMsg.append(Messages.getString("BasicPathRanker.BotSafeForInfantryAndProtos")); //$NON-NLS-1$
             return 0;
         }
 
@@ -857,75 +857,75 @@ public class BasicPathRanker extends PathRanker {
 
         // Get the odds of failing the piloting roll while moving through the building.
         double odds = (1.0 - (Compute.oddsAbove(movingUnit.getCrew().getPiloting()) / 100));
-        logMsg.append("\n\t\tChance to fail piloting roll: ").append(LOG_PERCENT.format(odds));
+        logMsg.append(Messages.getString("BasicPathRanker.BotChanceToFailPiloting")).append(LOG_PERCENT.format(odds)); //$NON-NLS-1$
 
         // Hazard is based on potential damage taken.
         double dmg = board.getBuildingAt(step.getPosition()).getCurrentCF(step.getPosition()) / 10D;
-        logMsg.append("\n\t\tPotential building damage: ").append(LOG_DECIMAL.format(dmg));
+        logMsg.append(Messages.getString("BasicPathRanker.BotPotentialBuildingDamage")).append(LOG_DECIMAL.format(dmg)); //$NON-NLS-1$
 
         double hazard = dmg * odds;
-        logMsg.append("\n\t\tHazard value (").append(LOG_DECIMAL.format(hazard)).append(").");
+        logMsg.append(Messages.getString("BasicPathRanker.BotHazardValue")).append(LOG_DECIMAL.format(hazard)).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
         return hazard;
     }
 
     private double calcIceHazard(Entity movingUnit, IHex hex, MoveStep step, boolean jumpLanding,
                                  StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating ice hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingIceHazard")); //$NON-NLS-1$
 
         // Hover units are above the surface.
         if (EntityMovementMode.HOVER == movingUnit.getMovementMode() ||
             EntityMovementMode.WIGE == movingUnit.getMovementMode()) {
-            logMsg.append("Hovering above ice (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotHoveingAboveIce")); //$NON-NLS-1$
             return 0;
         }
 
         // If there is no water under the ice, don't worry about breaking through.
         if (hex.depth() < 1) {
-            logMsg.append("No water under ice (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotNoWaterUnderIce")); //$NON-NLS-1$
             return 0;
         }
 
         // Hazard is based on chance to break through to the water underneath.
         double breakthroughMod = jumpLanding ? 0.5 : 0.1667;
-        logMsg.append("\n\t\tChance to break through ice: ").append(LOG_PERCENT.format(breakthroughMod));
+        logMsg.append(Messages.getString("BasicPathRanker.BotChangeToBreakIce")).append(LOG_PERCENT.format(breakthroughMod)); //$NON-NLS-1$
 
         double hazard = calcWaterHazard(movingUnit, hex, step, logMsg) * breakthroughMod;
-        logMsg.append("\n\t\tHazard value (").append(LOG_DECIMAL.format(hazard)).append(").");
+        logMsg.append(Messages.getString("BasicPathRanker.BotHazardValue")).append(LOG_DECIMAL.format(hazard)).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
         return hazard;
     }
 
     private double calcWaterHazard(Entity movingUnit, IHex hex, MoveStep step, StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating water hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingWaterHazard")); //$NON-NLS-1$
 
         // Puddles don't count.
         if (hex.depth() == 0) {
-            logMsg.append("Puddles don't count (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotPuddlesDontCount")); //$NON-NLS-1$
             return 0;
         }
 
         // Hover units are above the surface.
         if (EntityMovementMode.HOVER == movingUnit.getMovementMode() ||
             EntityMovementMode.WIGE == movingUnit.getMovementMode()) {
-            logMsg.append("Hovering above water (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotHoveringAboveWater")); //$NON-NLS-1$
             return 0;
         }
 
         // Amphibious units are safe (kind of the point).
         if (movingUnit.hasWorkingMisc(MiscType.F_FULLY_AMPHIBIOUS) ||
             movingUnit.hasWorkingMisc(MiscType.F_AMPHIBIOUS)) {
-            logMsg.append("Amphibious unit (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotAmphibiousUnit")); //$NON-NLS-1$
             return 0;
         }
 
         // Most other units are automatically destroyed.
         if (!(movingUnit instanceof Mech || movingUnit instanceof Protomech || movingUnit instanceof BattleArmor)) {
-            logMsg.append("Ill drown (1000).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotIllDrown")); //$NON-NLS-1$
             return 1000;
         }
 
         // Unsealed unit will drown.
         if (movingUnit instanceof Mech && ((Mech) movingUnit).isIndustrial()) {
-            logMsg.append("Industrial mechs drown too (1000).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotIndyMechsDrownToo")); //$NON-NLS-1$
             return 1000;
         }
 
@@ -950,15 +950,15 @@ public class BasicPathRanker extends PathRanker {
                 submergedLocations.add(loc);
             }
         }
-        logMsg.append("\n\t\tSubmerged locations: ").append(submergedLocations.size());
+        logMsg.append(Messages.getString("BasicPathRanker.BotSubmergedLocation")).append(submergedLocations.size()); //$NON-NLS-1$
 
         int hazardValue = 0;
         for (int loc : submergedLocations) {
-            logMsg.append("\n\t\t\tLocation ").append(loc).append(" is ");
+            logMsg.append(Messages.getString("BasicPathRanker.BotLocation")).append(loc).append(Messages.getString("BasicPathRanker.BotIs")); //$NON-NLS-1$ //$NON-NLS-2$
 
             // Only locations withou armor can breach in movement phase.
             if (movingUnit.getArmor(loc) > 0) {
-                logMsg.append(" not breached (0).");
+                logMsg.append(Messages.getString("BasicPathRanker.BotNotBreached")); //$NON-NLS-1$
                 continue;
             }
 
@@ -969,12 +969,12 @@ public class BasicPathRanker extends PathRanker {
                 Protomech.LOC_HEAD == loc ||
                 Protomech.LOC_TORSO == loc ||
                 (!(movingUnit instanceof Mech) && !(movingUnit instanceof Protomech))) {
-                logMsg.append(" breached and critical (1000).");
+                logMsg.append(Messages.getString("BasicPathRanker.BotBreachedAndCritical")); //$NON-NLS-1$
                 return 1000;
             }
 
             // Add 50 points per potential breach location.
-            logMsg.append(" breached (50).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotBreached50")); //$NON-NLS-1$
             hazardValue += 50;
         }
 
@@ -982,38 +982,38 @@ public class BasicPathRanker extends PathRanker {
     }
 
     private double calcFireHazard(Entity movingUnit, boolean endHex, StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating fire hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingFireHazard")); //$NON-NLS-1$
 
         double hazardValue = 0;
 
         // Fireproof BA ignores fire.
         if ((movingUnit instanceof BattleArmor) && ((BattleArmor) movingUnit).isFireResistant()) {
-            logMsg.append("Ignored by fire resistant armor (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotIgnoredByFireResistArmor")); //$NON-NLS-1$
             return 0;
         }
 
         // Tanks risk critical hits.
         if (movingUnit instanceof Tank) {
-            logMsg.append("Possible crit on tank (25).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotPossibleCritOnTank")); //$NON-NLS-1$
             return 25;
         }
 
         // Protomechs risk location destruction.
         if (movingUnit instanceof Protomech) {
-            logMsg.append("Possible location destruction (50).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotPossibleLocationDestruction")); //$NON-NLS-1$
             return 50;
         }
 
         // Infantry and BA risk total destruction.
         if (movingUnit instanceof Infantry) {
-            logMsg.append(("Possible unit destruction (1000)."));
+            logMsg.append((Messages.getString("BasicPathRanker.BotPossibleUnitDestruction"))); //$NON-NLS-1$
             return 1000;
         }
 
         // If this unit tracks heat, add the heat gain to the hazard value.
         if (movingUnit.getHeatCapacity() != Entity.DOES_NOT_TRACK_HEAT) {
             hazardValue += endHex ? 5 : 2;
-            logMsg.append("Heat gain (").append(hazardValue).append(").");
+            logMsg.append(Messages.getString("BasicPathRanker.BotHeatGain")).append(hazardValue).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return hazardValue;
@@ -1021,12 +1021,12 @@ public class BasicPathRanker extends PathRanker {
 
     private double calcMagmaHazard(IHex hex, boolean endHex, Entity movingUnit, boolean jumpLanding, MoveStep step,
                                    StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating magma hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingMagmaHazard")); //$NON-NLS-1$
 
         // Hovers are unaffected.
         if (EntityMovementMode.HOVER == movingUnit.getMovementMode() ||
             EntityMovementMode.WIGE == movingUnit.getMovementMode()) {
-            logMsg.append("Hovering above magma (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotHoveringAboveMagma")); //$NON-NLS-1$
             return 0;
         }
 
@@ -1038,18 +1038,18 @@ public class BasicPathRanker extends PathRanker {
             return calcLavaHazard(endHex, movingUnit, step, logMsg);
         } else {
             double breakThroughMod = jumpLanding ? 0.5 : 0.1667;
-            logMsg.append("\n\t\tChance to break through crust = ").append(LOG_PERCENT.format(breakThroughMod));
+            logMsg.append(Messages.getString("BasicPathRanker.BotChangeToBreakCrust")).append(LOG_PERCENT.format(breakThroughMod)); //$NON-NLS-1$
 
             // Factor in the chance to break through.
             double lavalHazard = calcLavaHazard(endHex, movingUnit, step, logMsg) * breakThroughMod;
-            logMsg.append("\n\t\t\tLava hazard (").append(LOG_DECIMAL.format(lavalHazard)).append(").");
+            logMsg.append(Messages.getString("BasicPathRanker.BotLavaHazard")).append(LOG_DECIMAL.format(lavalHazard)).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
             hazardValue += lavalHazard;
 
             // Factor in heat.
             if (movingUnit.getHeatCapacity() != Entity.DOES_NOT_TRACK_HEAT) {
                 double heatMod = (endHex ? 5 : 2) * (1 - breakThroughMod);
                 hazardValue += heatMod;
-                logMsg.append("\n\t\tHeat gain (").append(LOG_DECIMAL.format(heatMod)).append(").");
+                logMsg.append(Messages.getString("BasicPathRanker.BotHeatGain2")).append(LOG_DECIMAL.format(heatMod)).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 
@@ -1057,19 +1057,19 @@ public class BasicPathRanker extends PathRanker {
     }
 
     private double calcLavaHazard(boolean endHex, Entity movingUnit, MoveStep step, StringBuilder logMsg) {
-        logMsg.append("\n\tCalculating laval hazard:  ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotCalculatingLavaHazard")); //$NON-NLS-1$
 
 
         // Hovers are unaffected.
         if (EntityMovementMode.HOVER == movingUnit.getMovementMode() ||
             EntityMovementMode.WIGE == movingUnit.getMovementMode()) {
-            logMsg.append("Hovering above lava (0).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotHoveringAboveLava")); //$NON-NLS-1$
             return 0;
         }
 
         // Non-mech units auto-destroyed.
         if (!(movingUnit instanceof Mech)) {
-            logMsg.append("Non-mech instant destruction (1000).");
+            logMsg.append(Messages.getString("BasicPathRanker.BotNonMechInstantDestruction")); //$NON-NLS-1$
             return 1000;
         }
 
@@ -1078,25 +1078,25 @@ public class BasicPathRanker extends PathRanker {
         // Factor in heat.
         double heat = endHex ? 10.0 : 5.0;
         hazardValue += heat;
-        logMsg.append("\n\t\tHeat gain (").append(heat).append(LOG_DECIMAL.format(heat)).append(").");
+        logMsg.append(Messages.getString("BasicPathRanker.BotHeatGain2")).append(heat).append(LOG_DECIMAL.format(heat)).append(")."); //$NON-NLS-1$ //$NON-NLS-2$
 
         // Factor in potential damage.
         double dmg;
-        logMsg.append("\n\t\tDamage to ");
+        logMsg.append(Messages.getString("BasicPathRanker.BotDamageTo")); //$NON-NLS-1$
         if (step.isProne()) {
             dmg = 7 * movingUnit.locations();
-            logMsg.append("everything [prone] (");
+            logMsg.append(Messages.getString("BasicPathRanker.BotEverythingProne")); //$NON-NLS-1$
         } else if (movingUnit instanceof BipedMech) {
             dmg = 14;
-            logMsg.append("legs (");
+            logMsg.append(Messages.getString("BasicPathRanker.BotLegs")); //$NON-NLS-1$
         } else if (movingUnit instanceof TripodMech) {
             dmg = 21;
-            logMsg.append("legs (");
+            logMsg.append(Messages.getString("BasicPathRanker.BotLegs")); //$NON-NLS-1$
         } else {
             dmg = 28;
-            logMsg.append("legs (");
+            logMsg.append(Messages.getString("BasicPathRanker.BotLegs")); //$NON-NLS-1$
         }
-        logMsg.append(LOG_DECIMAL.format(dmg)).append(").");
+        logMsg.append(LOG_DECIMAL.format(dmg)).append(")."); //$NON-NLS-1$
         hazardValue += dmg;
 
         return hazardValue;
