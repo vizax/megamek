@@ -87,7 +87,7 @@ public class MegaMek {
             cp.parse();
             String lf = cp.getLogFilename();
             if (lf != null) {
-                if (lf.equals("none") || lf.equals("off")) { //$NON-NLS-1$ //$NON-NLS-2$
+                if (lf.equals("none") || lf.equals("off")) { //$NON-NLS-1$ //$NON-NLS-2$ 
                     logFileName = null;
                 } else {
                     logFileName = lf;
