@@ -30,64 +30,72 @@ import java.util.Vector;
 import megamek.common.Compute;
 import megamek.common.Configuration;
 
-/** 
- * This class sets up a random name generator that can then
- * be used to generate random pilot names. it will have a couple different
- * settings and flexible input files
+/**
+ * This class sets up a random name generator that can then be used to generate
+ * random pilot names. it will have a couple different settings and flexible
+ * input files
  * <p>
- * Files are located in {@link Configuration#namesDir()}. All files are comma-delimited text files.
+ * Files are located in {@link Configuration#namesDir()}. All files are
+ * comma-delimited text files.
  * </p>
  * <p>
- * The masterancestry.txt file shows the correspondence between the different ethnic names and their numeric
- * code in the database. This file is currently not actually read in by MM, but is provided as a reference. The same
- * numeric code must be used across all of the files listed below. Currently the numeric codes must be listed in exact
- * sequential order (i.e. no skipping numbers) for the program to work correctly.</p>
+ * The masterancestry.txt file shows the correspondence between the different
+ * ethnic names and their numeric code in the database. This file is currently
+ * not actually read in by MM, but is provided as a reference. The same numeric
+ * code must be used across all of the files listed below. Currently the numeric
+ * codes must be listed in exact sequential order (i.e. no skipping numbers) for
+ * the program to work correctly.
+ * </p>
  * <p>
- * The name database is located in three files: firstname_males.txt, firstname_females.txt, and surnames.txt.
- * There ar three comma-delimited fields in each of these data files: fld1,fld2,fld3
+ * The name database is located in three files: firstname_males.txt,
+ * firstname_females.txt, and surnames.txt. There ar three comma-delimited
+ * fields in each of these data files: fld1,fld2,fld3
  * <ul>
- * <li>fld1 - The name itself, either a male/female first name or a surname.</li>
- * <li>fld2 - a frequency weight to account for some names being more common than others. Currently this is
- *           not being used.</li>
- * <li>fld3 - the numeric code identifying the "ethnic" group this name belongs to.</li>
+ * <li>fld1 - The name itself, either a male/female first name or a surname.
+ * </li>
+ * <li>fld2 - a frequency weight to account for some names being more common
+ * than others. Currently this is not being used.</li>
+ * <li>fld3 - the numeric code identifying the "ethnic" group this name belongs
+ * to.</li>
  * </ul>
  * </p>
  * <p>
- * Faction files are located in {@link Configuration#namesDir()}{@code /factions}.
- * The name that is given before ".txt" is used as the key for the faction.
- * The faction files will have varying number of fields depending on how many
- * ethnic groups exist. The faction file does two things. First, it identifies
- * the relative frequency of different ethnic surnames for a faction.
- * Second, it identifies the correspondence between first names and surnames.
- * This allows, for example, for more Japanese first names regardless of surname
- * in the Draconis Combine. There should be a line in the Faction file for each
- * ethnic group.
+ * Faction files are located in {@link Configuration#namesDir()}
+ * {@code /factions}. The name that is given before ".txt" is used as the key
+ * for the faction. The faction files will have varying number of fields
+ * depending on how many ethnic groups exist. The faction file does two things.
+ * First, it identifies the relative frequency of different ethnic surnames for
+ * a faction. Second, it identifies the correspondence between first names and
+ * surnames. This allows, for example, for more Japanese first names regardless
+ * of surname in the Draconis Combine. There should be a line in the Faction
+ * file for each ethnic group.
  * <ul>
  * <li>fld1 - the id for the ethnic group
- * <li>fld2 - the ethnic group name. Not currently read in, just for easy reference.
+ * <li>fld2 - the ethnic group name. Not currently read in, just for easy
+ * reference.
  * <li>fld3 - The relative frequency of this ethnic surname in the faction.
- * <li>fld4-fldn - These fields identify the relative frequency of first names from an ethnic group given the surname
- *                 listed in fld1.
+ * <li>fld4-fldn - These fields identify the relative frequency of first names
+ * from an ethnic group given the surname listed in fld1.
  * </ul>
  * </p>
+ * 
  * @author Jay Lawson
  */
 public class RandomNameGenerator implements Serializable {
     private static final String PROP_INITIALIZED = "initialized"; //$NON-NLS-1$
 
-	/** Default directory containing the faction-specific name files. */
+    /** Default directory containing the faction-specific name files. */
     private static final String DIR_NAME_FACTIONS = "factions"; //$NON-NLS-1$
 
     /** Default filename for the list of male first names. */
     private static final String FILENAME_FIRSTNAMES_MALE = "firstnames_male.txt"; //$NON-NLS-1$
-    
+
     /** Default filename for the list of female first names. */
     private static final String FILENAME_FIRSTNAMES_FEMALE = "firstnames_female.txt"; //$NON-NLS-1$
 
     /** Default filename for the list of surnames names. */
     private static final String FILENAME_SURNAMES = "surnames.txt"; //$NON-NLS-1$
 
-    
     /**
      *
      */
@@ -137,7 +145,7 @@ public class RandomNameGenerator implements Serializable {
 
         // READ IN MALE FIRST NAMES
         File male_firstnames_path = new File(Configuration.namesDir(), FILENAME_FIRSTNAMES_MALE);
-        try(Scanner input = new Scanner(new FileInputStream(male_firstnames_path), "UTF-8")) { //$NON-NLS-1$
+        try (Scanner input = new Scanner(new FileInputStream(male_firstnames_path), "UTF-8")) { //$NON-NLS-1$
             int linen = 0;
             while (input.hasNextLine()) {
                 // Check to see if we've been interrupted
@@ -148,8 +156,7 @@ public class RandomNameGenerator implements Serializable {
                 linen++;
                 String[] values = line.split(","); //$NON-NLS-1$
                 if (values.length < 3) {
-                    System.err.println(
-                            "Not enough fields in '" + male_firstnames_path.toString() + "' on " + linen //$NON-NLS-1$ //$NON-NLS-2$
+                    System.err.println("Not enough fields in '" + male_firstnames_path.toString() + "' on " + linen //$NON-NLS-1$ //$NON-NLS-2$
                     );
                     continue;
                 }
@@ -177,7 +184,7 @@ public class RandomNameGenerator implements Serializable {
 
         // READ IN FEMALE FIRST NAMES
         File female_firstnames_path = new File(Configuration.namesDir(), FILENAME_FIRSTNAMES_FEMALE);
-        try(Scanner input = new Scanner(new FileInputStream(female_firstnames_path), "UTF-8")) { //$NON-NLS-1$
+        try (Scanner input = new Scanner(new FileInputStream(female_firstnames_path), "UTF-8")) { //$NON-NLS-1$
             int linen = 0;
             while (input.hasNextLine()) {
                 // Check to see if we've been interrupted
@@ -188,8 +195,8 @@ public class RandomNameGenerator implements Serializable {
                 linen++;
                 String[] values = line.split(","); //$NON-NLS-1$
                 if (values.length < 3) {
-                    System.err.println(
-                            "RandomNameGenerator.populateNames(): Not enough fields in '" + female_firstnames_path.toString() + "' on " + linen //$NON-NLS-1$ //$NON-NLS-2$
+                    System.err.println("RandomNameGenerator.populateNames(): Not enough fields in '" //$NON-NLS-1$
+                            + female_firstnames_path.toString() + "' on " + linen //$NON-NLS-1$
                     );
                     continue;
                 }
@@ -217,7 +224,7 @@ public class RandomNameGenerator implements Serializable {
 
         // READ IN SURNAMES
         File surnames_path = new File(Configuration.namesDir(), FILENAME_SURNAMES);
-        try(Scanner input = new Scanner(new FileInputStream(surnames_path), "UTF-8")) { //$NON-NLS-1$
+        try (Scanner input = new Scanner(new FileInputStream(surnames_path), "UTF-8")) { //$NON-NLS-1$
             int linen = 0;
             while (input.hasNextLine()) {
                 // Check to see if we've been interrupted
@@ -228,8 +235,7 @@ public class RandomNameGenerator implements Serializable {
                 linen++;
                 String[] values = line.split(","); //$NON-NLS-1$
                 if (values.length < 3) {
-                    System.err.println(
-                            "Not enough fields in '" + surnames_path + "' on " + linen //$NON-NLS-1$ //$NON-NLS-2$
+                    System.err.println("Not enough fields in '" + surnames_path + "' on " + linen //$NON-NLS-1$ //$NON-NLS-2$
                     );
                     continue;
                 }
@@ -275,7 +281,7 @@ public class RandomNameGenerator implements Serializable {
             factionLast.put(key, new Vector<String>());
             factionFirst.put(key, new HashMap<String, Vector<String>>());
             File ff = new File(factions_dir_path, filename);
-            try(Scanner factionInput = new Scanner(new FileInputStream(ff), "UTF-8")) { //$NON-NLS-1$
+            try (Scanner factionInput = new Scanner(new FileInputStream(ff), "UTF-8")) { //$NON-NLS-1$
                 Map<String, Vector<String>> hash = new HashMap<String, Vector<String>>();
                 while (factionInput.hasNextLine()) {
                     // Check to see if we've been interrupted
@@ -293,7 +299,8 @@ public class RandomNameGenerator implements Serializable {
                     Vector<String> v = new Vector<String>();
                     for (int i = 3; i < values.length; i++) {
                         freq = Integer.parseInt(values[i]);
-                        // TODO: damm - I don't have the integer codes for ethnicity
+                        // TODO: damm - I don't have the integer codes for
+                        // ethnicity
                         // here, for now just assume they are the
                         // same as i-2
                         while (freq > 0) {
@@ -314,23 +321,23 @@ public class RandomNameGenerator implements Serializable {
         }
     }
 
-	public synchronized void addInitializationListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
-		if(initialized) {
-			// Fire and remove
-			pcs.firePropertyChange(PROP_INITIALIZED, false, true);
-			pcs.removePropertyChangeListener(listener);
-		}
-	}
-	
-	protected void setInitialized(boolean initialized) {
-		pcs.firePropertyChange(PROP_INITIALIZED, this.initialized, this.initialized = initialized);
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
-	}
-	
+    public synchronized void addInitializationListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+        if (initialized) {
+            // Fire and remove
+            pcs.firePropertyChange(PROP_INITIALIZED, false, true);
+            pcs.removePropertyChangeListener(listener);
+        }
+    }
+
+    protected void setInitialized(boolean initialized) {
+        pcs.firePropertyChange(PROP_INITIALIZED, this.initialized, this.initialized = initialized);
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
     /**
      * Generate a single random name
      * 
@@ -341,8 +348,7 @@ public class RandomNameGenerator implements Serializable {
     }
 
     public String generate(boolean isFemale) {
-        if ((null != chosenFaction) && (null != factionLast)
-                && (null != factionFirst) && (null != firstm)
+        if ((null != chosenFaction) && (null != factionLast) && (null != factionFirst) && (null != firstm)
                 && (null != firstf) && (null != last)) {
             // this is a total hack, but for now lets assume that
             // if the chosenFaction name contains the word "clan"
@@ -351,13 +357,11 @@ public class RandomNameGenerator implements Serializable {
 
             Vector<String> ethnicities = factionLast.get(chosenFaction);
             if ((null != ethnicities) && (ethnicities.size() > 0)) {
-                String eLast = ethnicities.get(Compute.randomInt(ethnicities
-                        .size()));
+                String eLast = ethnicities.get(Compute.randomInt(ethnicities.size()));
                 // ok now we need to decide on a first name list
                 ethnicities = factionFirst.get(chosenFaction).get(eLast);
                 if ((null != ethnicities) && (ethnicities.size() > 0)) {
-                    String eFirst = ethnicities.get(Compute
-                            .randomInt(ethnicities.size()));
+                    String eFirst = ethnicities.get(Compute.randomInt(ethnicities.size()));
                     // ok now we can get the first and last name vectors
                     if (isClan) {
                         eFirst = eLast;
@@ -367,12 +371,9 @@ public class RandomNameGenerator implements Serializable {
                         fnames = firstf.get(eFirst);
                     }
                     Vector<String> lnames = last.get(eLast);
-                    if ((null != fnames) && (null != lnames)
-                            && (fnames.size() > 0) && (lnames.size() > 0)) {
-                        String first = fnames.get(Compute.randomInt(fnames
-                                .size()));
-                        String last = lnames.get(Compute.randomInt(lnames
-                                .size()));
+                    if ((null != fnames) && (null != lnames) && (fnames.size() > 0) && (lnames.size() > 0)) {
+                        String first = fnames.get(Compute.randomInt(fnames.size()));
+                        String last = lnames.get(Compute.randomInt(lnames.size()));
                         if (isClan) {
                             return first;
                         }
@@ -419,7 +420,7 @@ public class RandomNameGenerator implements Serializable {
     public void dispose() {
         interrupted = true;
         dispose = true;
-        if (initialized){
+        if (initialized) {
             clear();
         }
     }
